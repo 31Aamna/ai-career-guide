@@ -8,7 +8,7 @@ const CareerRoadmapPage = () => {
   
   // 1. Add state for Current Position
   const [currentPos, setCurrentPos] = useState('');
-  const [targetGoal, setTargetGoal] = useState('Frontend Developer');
+  const [targetGoal, setTargetGoal] = useState('');
 
   const handleBuild = () => {
     // Basic validation
