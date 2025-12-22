@@ -1,161 +1,102 @@
 import React, { useState } from 'react';
-import '../styles/Roadmap.css';
+import RoadmapForm from '../components/CareerRoadmap/RoadmapForm';
+import RoadmapTimeline from '../components/CareerRoadmap/RoadmapTimeline';
+import '../components/CareerRoadmap/CareerRoadmap.css';
 
 const CareerRoadmapPage = () => {
   const [isGenerated, setIsGenerated] = useState(false);
+  
+  // 1. Add state for Current Position
+  const [currentPos, setCurrentPos] = useState('');
   const [targetGoal, setTargetGoal] = useState('Frontend Developer');
 
-  const handleBuildPath = () => {
-    setIsGenerated(true);
+  const handleBuild = () => {
+    // Basic validation
+    if (targetGoal.trim() !== "" && currentPos.trim() !== "") {
+      setIsGenerated(true);
+    } else {
+      alert("Please enter both your Current Position and Target Goal!");
+    }
   };
 
   return (
     <div className="roadmap-container">
-      {/* 1. Page Header */}
+      
+      {/* HEADER ROW */}
       <div className="flex-between mb-30">
-        <div className="roadmap-header" style={{ textAlign: 'left', marginBottom: 0 }}>
+        <div className="roadmap-header" style={{marginBottom: 0}}>
           <h1>Career Roadmap 🗺️</h1>
-          <p>Your personalized path to becoming a <span className="role-highlight" style={{color:'var(--primary)'}}>Senior Full Stack Developer</span></p>
+          <p>Your personalized path to becoming a <span className="role-highlight">{targetGoal}</span></p>
         </div>
-        <div className="no-context-badge" style={{background: '#FFF8E6', color: '#D97706', padding: '8px 15px', borderRadius: '12px', fontSize: '13px', fontWeight: 'bold'}}>
-          ⚠️ No Resume Context
-        </div>
-      </div>
-
-      {/* 2. Input Section */}
-      <div className="roadmap-input-card">
-        <div className="input-grid">
-          <div className="input-field-group">
-            <div className="input-label">🎯 Current Position</div>
-            <div className="input-wrapper">
-              <input type="text" placeholder="none" />
-            </div>
-          </div>
-          <div className="input-field-group">
-            <div className="input-label">✨ Target Career Goal</div>
-            <div className="input-wrapper">
-              <input 
-                type="text" 
-                value={targetGoal} 
-                onChange={(e) => setTargetGoal(e.target.value)} 
-              />
-            </div>
-          </div>
-        </div>
-        <div className="flex-between">
-          <button className="btn-build" onClick={handleBuildPath}>
-            ⚡ Build Growth Path
-          </button>
-          <span className="tip-text" style={{fontSize:'12px', color:'var(--text-light)', fontStyle:'italic'}}>
-            Tip: Add your resume in the <strong>Resume Analyzer</strong> for a more accurate gap analysis.
-          </span>
+        
+        <div className="no-context-badge">
+          <span>⚠️</span> No Resume Context
         </div>
       </div>
 
-      {/* 3. Generated Roadmap Content */}
+      {/* INPUT SECTION */}
+      <RoadmapForm 
+        currentPos={currentPos}
+        setCurrentPos={setCurrentPos} // Pass the setter
+        targetGoal={targetGoal} 
+        setTargetGoal={setTargetGoal} 
+        onBuild={handleBuild}
+      />
+
+      {/* GENERATED CONTENT */}
       {isGenerated && (
-        <div className="grid-2" style={{animation: 'fadeIn 0.5s ease-in'}}>
+        <div className="grid-2" style={{ gridTemplateColumns: '2fr 1fr', alignItems: 'start', animation: 'fadeIn 0.5s ease-in' }}>
           
-          {/* LEFT COLUMN: Learning Path + Recommended Learning */}
+          {/* LEFT COLUMN */}
           <div className="flex-col">
-            <div className="learning-path-card">
-              <h2>Step-by-Step Learning Path</h2>
-              
-              <div className="timeline">
-                <div className="timeline-item completed">
-                  <div className="timeline-icon">✓</div>
-                  <div className="step-header">
-                    <h3>Frontend Mastery</h3>
-                    <span className="phase-tag">Phase 1</span>
-                  </div>
-                  <p>Deep dive into Advanced React patterns, State Management (Redux/Zustand), and Performance Optimization techniques.</p>
-                </div>
-
-                <div className="timeline-item active">
-                  <div className="timeline-icon"></div>
-                  <div className="step-header">
-                    <h3>Backend Fundamentals</h3>
-                    <span className="phase-tag active">Phase 2 (Active)</span>
-                  </div>
-                  <p>Understanding the Node.js runtime, building scalable APIs with Express, and mastering RESTful design principles.</p>
-                </div>
-
-                <div className="timeline-item">
-                  <div className="timeline-icon">🔒</div>
-                  <div className="step-header">
-                    <h3>Database Management</h3>
-                    <span className="phase-tag">Phase 3</span>
-                  </div>
-                  <p>Mastering SQL (PostgreSQL) vs NoSQL (MongoDB), Schema design for complex applications, and Database Indexing strategies.</p>
-                </div>
-
-                <div className="timeline-item">
-                  <div className="timeline-icon">🔒</div>
-                  <div className="step-header">
-                    <h3>System Design & Cloud</h3>
-                    <span className="phase-tag">Phase 4</span>
-                  </div>
-                  <p>Learning High-Level System Architecture, Microservices, Docker containerization, and AWS deployment basics.</p>
+            <RoadmapTimeline />
+            
+            <div className="rec-learning-card">
+              <h3 style={{fontSize:'18px', marginBottom:'20px', display:'flex', alignItems:'center', gap:'10px'}}>
+                📚 Recommended Learning
+              </h3>
+              <div className="learning-item">
+                <div className="learning-icon">📹</div>
+                <div>
+                  <h4 style={{fontSize:'14px', margin:0}}>Node.js: The Complete Guide</h4>
+                  <p style={{fontSize:'12px', margin:0, color:'var(--text-light)'}}>Master the backend with this top-rated course.</p>
                 </div>
               </div>
-            </div>
-
-            {/* MOVED: Recommended Learning now under the path */}
-            <div className="side-card" style={{marginTop: '25px'}}>
-              <h3 style={{display:'flex', alignItems:'center', gap:'8px'}}>📚 Recommended Learning</h3>
-              <div className="learning-grid-horizontal">
-                <div className="learning-item">
-                  <div className="learning-icon">📹</div>
-                  <div className="learning-text">
-                    <h4>Node.js: The Complete Guide</h4>
-                    <p>Master the backend with this top-rated course.</p>
-                  </div>
-                </div>
-                <div className="learning-item">
-                  <div className="learning-icon">📖</div>
-                  <div className="learning-text">
-                    <h4>Designing Data-Intensive Apps</h4>
-                    <p>The gold standard book for system design.</p>
-                  </div>
+              <div className="learning-item">
+                <div className="learning-icon">📖</div>
+                <div>
+                  <h4 style={{fontSize:'14px', margin:0}}>Designing Data-Intensive Apps</h4>
+                  <p style={{fontSize:'12px', margin:0, color:'var(--text-light)'}}>The gold standard book for system design.</p>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* RIGHT COLUMN: Improvements + Suggestions */}
+          {/* RIGHT COLUMN */}
           <div className="flex-col">
             <div className="side-card">
-              <h3>⚠️ Improvements Needed</h3>
+              <h3 style={{fontSize:'16px'}}>⚠️ Improvements Needed</h3>
               <span className="card-subtitle">Critical skills required to reach your target role</span>
               
               <div className="skill-list">
                 <div className="skill-row">
-                  <div className="skill-info">
-                    <h4>TypeScript</h4>
-                    <span>Current: Beginner → Target: Advanced</span>
-                  </div>
+                  <div><h4 style={{fontSize:'14px', margin:0}}>TypeScript</h4><span style={{fontSize:'11px', color:'var(--text-light)'}}>Beginner → Advanced</span></div>
                   <span className="priority-badge high">HIGH PRIORITY</span>
                 </div>
                 <div className="skill-row">
-                  <div className="skill-info">
-                    <h4>Docker</h4>
-                    <span>Current: None → Target: Intermediate</span>
-                  </div>
-                  <span className="priority-badge critical">CRITICAL PRIORITY</span>
+                  <div><h4 style={{fontSize:'14px', margin:0}}>Docker</h4><span style={{fontSize:'11px', color:'var(--text-light)'}}>None → Intermediate</span></div>
+                  <span className="priority-badge critical">CRITICAL</span>
                 </div>
-                <div className="skill-row" style={{marginBottom: 0}}>
-                  <div className="skill-info">
-                    <h4>System Design</h4>
-                    <span>Current: None → Target: Intermediate</span>
-                  </div>
-                  <span className="priority-badge critical">CRITICAL PRIORITY</span>
+                <div className="skill-row" style={{border:'none'}}>
+                  <div><h4 style={{fontSize:'14px', margin:0}}>System Design</h4><span style={{fontSize:'11px', color:'var(--text-light)'}}>None → Intermediate</span></div>
+                  <span className="priority-badge critical">CRITICAL</span>
                 </div>
               </div>
             </div>
 
             <div className="side-card suggestion-card">
-              <h3 style={{display:'flex', alignItems:'center', gap:'8px'}}>🤖 Career Suggestion</h3>
-              <p className="suggestion-content">
+              <h3 style={{display:'flex', alignItems:'center', gap:'8px', fontSize:'16px'}}>🤖 Career Suggestion</h3>
+              <p style={{fontSize:'13px', fontStyle:'italic', lineHeight:'1.5', marginTop:'10px'}}>
                 "Based on current job trends, mastering <strong>System Design</strong> will increase your interview success rate for Senior roles by nearly 40%."
               </p>
             </div>
@@ -163,6 +104,8 @@ const CareerRoadmapPage = () => {
 
         </div>
       )}
+
+      <style>{`@keyframes fadeIn { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }`}</style>
     </div>
   );
 };
