@@ -1,0 +1,265 @@
+/* Container & Global Header */
+.roadmap-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.roadmap-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.roadmap-header h1 {
+  font-size: 32px;
+  color: var(--text-main);
+  margin-bottom: 8px;
+}
+
+.roadmap-header p {
+  color: var(--text-light);
+  font-size: 16px;
+}
+
+/* --- Input Card (From Prototype) --- */
+.roadmap-input-card {
+  background: var(--white);
+  border-radius: var(--border-radius);
+  padding: 30px;
+  box-shadow: var(--card-shadow);
+  margin-bottom: 40px;
+}
+
+.input-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+  margin-bottom: 25px;
+}
+
+.input-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 10px;
+}
+
+.input-wrapper {
+  background: var(--bg-page);
+  border-radius: 12px;
+  padding: 14px 18px;
+}
+
+.input-wrapper input {
+  background: transparent;
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 15px;
+  color: var(--text-main);
+}
+
+.btn-build {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+/* --- Learning Path Card (Left) --- */
+.learning-path-card {
+  background: var(--white);
+  border-radius: var(--border-radius);
+  padding: 40px;
+  box-shadow: var(--card-shadow);
+}
+
+.learning-path-card h2 {
+  font-size: 24px;
+  margin-bottom: 30px;
+}
+
+/* Timeline Logic */
+.timeline {
+  position: relative;
+  padding-left: 20px;
+}
+
+.timeline-item {
+  position: relative;
+  padding-left: 45px;
+  padding-bottom: 40px;
+}
+
+/* Vertical line connecting the steps */
+.timeline-item::before {
+  content: "";
+  position: absolute;
+  left: 14px;
+  top: 35px;
+  bottom: 0;
+  width: 2px;
+  background-color: #e0e5f2;
+}
+
+.timeline-item.completed::before {
+  background-color: var(--green);
+}
+
+.timeline-item:last-child::before {
+  display: none;
+}
+
+.timeline-icon {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: white;
+  border: 2px solid #e0e5f2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  font-size: 14px;
+}
+
+.timeline-item.completed .timeline-icon {
+  border-color: var(--green);
+  color: var(--green);
+}
+
+.timeline-item.active .timeline-icon {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.timeline-item.active .timeline-icon::after {
+  content: "";
+  width: 8px;
+  height: 8px;
+  background: var(--primary);
+  border-radius: 50%;
+}
+
+.step-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.step-header h3 {
+  font-size: 18px;
+  color: var(--text-main);
+}
+
+.phase-tag {
+  font-size: 12px;
+  color: var(--text-light);
+  font-weight: 600;
+}
+
+.phase-tag.active {
+  color: var(--primary);
+}
+
+.timeline-item p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-light);
+  max-width: 90%;
+}
+
+/* --- Right Side Cards --- */
+.side-card {
+  background: var(--white);
+  border-radius: var(--border-radius);
+  padding: 30px;
+  box-shadow: var(--card-shadow);
+  margin-bottom: 25px;
+}
+
+.side-card h3 {
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+
+.card-subtitle {
+  font-size: 13px;
+  color: var(--text-light);
+  margin-bottom: 25px;
+  display: block;
+}
+
+.skill-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.skill-info h4 {
+  font-size: 15px;
+  margin-bottom: 4px;
+}
+
+.skill-info span {
+  font-size: 12px;
+  color: var(--text-light);
+}
+
+.priority-badge {
+  font-size: 10px;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 6px;
+  text-transform: uppercase;
+}
+
+.priority-badge.high { background: #FFF7E8; color: #FFB547; }
+.priority-badge.critical { background: #FFEEEE; color: #E31A1A; }
+.priority-badge.medium { background: #E9E3FF; color: #4318FF; }
+
+/* Suggestion Card */
+.suggestion-card {
+  border-left: 5px solid var(--primary);
+}
+
+.suggestion-content {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-main);
+  font-style: italic;
+}
+
+/* Learning Resources */
+.learning-item {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.learning-icon {
+  font-size: 22px;
+}
+
+.learning-text h4 {
+  font-size: 14px;
+  margin: 0;
+}
+
+.learning-text p {
+  font-size: 12px;
+  margin-top: 3px;
+}
