@@ -3,76 +3,70 @@ import React, { createContext, useState, useEffect } from 'react';
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-  // 1. User State (Default Mock Data)
-  const [user, setUser] = useState({
+  // Mock User Database
+  const mockUser = {
+    email: 'alex@career.ai',
+    password: 'password123',
     name: 'Alex Johnson',
-    email: 'alex@example.com',
     role: 'Frontend Developer',
-    bio: 'Passionate developer looking to master React and Node.js.',
     avatar: 'A'
-  });
+  };
 
+  const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isPremium, setIsPremium] = useState(false);
-  const [isNewUser, setIsNewUser] = useState(false);
+  
+  // Logic: First time user vs Returning user
+  // We simulate this: If they log in with the specific "demo" account, they are returning.
+  // Any other valid login is treated as "First Time".
+  const [isNewUser, setIsNewUser] = useState(true);
 
-  // 2. Initialize from Local Storage
   useEffect(() => {
-    // Check Auth
-    const storedUser = localStorage.getItem('careerai_user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+    // Check if session exists (Basic persistence)
+    const storedAuth = localStorage.getItem('careerai_auth');
+    if (storedAuth) {
+      setUser(JSON.parse(storedAuth));
       setIsAuthenticated(true);
-    }
-
-    // Check Onboarding
-    const hasVisited = localStorage.getItem('careerai_visited');
-    if (hasVisited) {
-      setIsNewUser(false);
-    } else {
-      setIsNewUser(true);
+      
+      // Check visited status
+      const visited = localStorage.getItem('careerai_visited');
+      setIsNewUser(!visited); 
     }
   }, []);
 
-  // 3. Auth Functions
   const login = (email, password) => {
-    // Mock Validation
-    if (email === 'demo@career.ai' && password === 'demo') {
+    // 1. Validation Logic
+    if (email === mockUser.email && password === mockUser.password) {
+      // Success: Returning User Scenario
+      const userData = { ...mockUser };
+      setUser(userData);
       setIsAuthenticated(true);
+      setIsNewUser(false); // They have an account, so show standard dash
+      localStorage.setItem('careerai_auth', JSON.stringify(userData));
+      return { success: true };
+    } 
+    
+    // 2. Allow a "New User" test case
+    if (email.includes('@') && password.length >= 6) {
+      // Success: New User Scenario
+      const newUser = { name: 'New User', email, role: 'Aspiring Dev', avatar: 'N' };
+      setUser(newUser);
+      setIsAuthenticated(true);
+      setIsNewUser(true); // Show Welcome Dash
+      localStorage.setItem('careerai_auth', JSON.stringify(newUser));
       return { success: true };
     }
-    // Allow the default user to login for demo purposes
-    if (email === user.email) {
-      setIsAuthenticated(true);
-      return { success: true };
-    }
-    return { success: false, message: "Invalid credentials (Try: demo@career.ai / demo)" };
-  };
 
-  const register = (name, email, password) => {
-    const newUser = { ...user, name, email };
-    setUser(newUser);
-    setIsAuthenticated(true);
-    setIsNewUser(true); // Show welcome screen for new signups
-    localStorage.setItem('careerai_user', JSON.stringify(newUser));
-    localStorage.setItem('careerai_visited', 'false'); 
+    return { success: false, message: "Invalid credentials. Try alex@career.ai / password123" };
   };
 
   const logout = () => {
     setIsAuthenticated(false);
-    // We don't clear localStorage user here to keep the demo data persistent
+    setUser(null);
+    localStorage.removeItem('careerai_auth');
   };
 
-  const updateUserProfile = (updatedData) => {
-    const newUser = { ...user, ...updatedData };
-    setUser(newUser);
-    localStorage.setItem('careerai_user', JSON.stringify(newUser));
-  };
-
-  // 4. Feature Functions
   const togglePremium = () => setIsPremium(prev => !prev);
-  
-  // FIX: This function was missing in the previous step
   const activatePremium = () => setIsPremium(true);
   
   const completeOnboarding = () => {
@@ -80,19 +74,12 @@ export const UserProvider = ({ children }) => {
     localStorage.setItem('careerai_visited', 'true');
   };
 
+  const updateUserProfile = (data) => setUser(prev => ({ ...prev, ...data }));
+
   return (
     <UserContext.Provider value={{ 
-      user, 
-      isAuthenticated, 
-      isPremium, 
-      isNewUser, 
-      login, 
-      register, 
-      logout,
-      updateUserProfile,
-      togglePremium, 
-      activatePremium, // Exported here for PaymentPage
-      completeOnboarding 
+      user, isAuthenticated, isPremium, isNewUser, 
+      login, logout, togglePremium, activatePremium, completeOnboarding, updateUserProfile 
     }}>
       {children}
     </UserContext.Provider>

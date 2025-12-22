@@ -8,10 +8,8 @@ import ResumeAnalyzerPage from './Page/ResumeAnalyzerPage';
 import SalaryInsightsPage from './Page/SalaryInsightsPage';
 import InterviewPrepPage from './Page/InterviewPrepPage';
 import PaymentPage from './Page/PaymentPage';
-import LoginPage from './Page/LoginPage';
 import SettingsPage from './Page/SettingsPage';
-import NotificationsPage from './Page/NotificationsPage';
-
+import LoginPage from './Page/LoginPage';
 import './styles/global.css';
 
 // Protected Route Wrapper
@@ -35,14 +33,19 @@ function AppRoutes() {
     <Routes>
       <Route path="/login" element={<LoginPage />} />
       
-      {/* Protected Routes */}
-      <Route path="/" element={<ProtectedRoute><AppLayout><Dashboard /></AppLayout></ProtectedRoute>} />
+      {/* --- PUBLIC ROUTE (Dashboard is now visible to everyone) --- */}
+      <Route path="/" element={
+        <AppLayout>
+          <Dashboard />
+        </AppLayout>
+      } />
+      
+      {/* --- PROTECTED ROUTES (Require Login) --- */}
       <Route path="/resume" element={<ProtectedRoute><AppLayout><ResumeAnalyzerPage /></AppLayout></ProtectedRoute>} />
       <Route path="/salary" element={<ProtectedRoute><AppLayout><SalaryInsightsPage /></AppLayout></ProtectedRoute>} />
       <Route path="/interview" element={<ProtectedRoute><AppLayout><InterviewPrepPage /></AppLayout></ProtectedRoute>} />
       <Route path="/payment" element={<ProtectedRoute><AppLayout><PaymentPage /></AppLayout></ProtectedRoute>} />
       <Route path="/settings" element={<ProtectedRoute><AppLayout><SettingsPage /></AppLayout></ProtectedRoute>} />
-      <Route path="/notifications" element={<ProtectedRoute><AppLayout><NotificationsPage /></AppLayout></ProtectedRoute>} />
       
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>

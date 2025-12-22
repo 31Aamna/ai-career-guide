@@ -10,13 +10,19 @@ const UploadCard = ({ onAnalyze }) => {
   };
 
   return (
-    // Reduced height from 350px to 250px
-    <Card style={{height:'250px', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', background:'#fff'}}>
-      <div style={{width:'100%', height:'100%', border:'2px dashed #E0E5F2', borderRadius:'20px', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', background:'#FAFCFE'}}>
-        {/* Reduced icon size and margin */}
+    <Card style={{height:'250px', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center'}}>
+      <div style={{
+        width:'100%', height:'100%', 
+        border: '2px dashed var(--text-light)', // Dynamic border color
+        borderRadius:'20px', 
+        display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', 
+        background: 'var(--bg-page)' // Dynamic background
+      }}>
         <div style={{fontSize:'40px', marginBottom:'15px'}}>☁️</div>
         
-        <h3 style={{fontSize:'18px', marginBottom:'5px'}}>{file ? file.name : "Drag & Drop your resume"}</h3>
+        <h3 style={{fontSize:'18px', marginBottom:'5px', color: 'var(--text-main)'}}>
+          {file ? file.name : "Drag & Drop your resume"}
+        </h3>
         <p className="mb-20" style={{color:'var(--text-light)', fontSize:'13px'}}>
           {file ? `Size: ${(file.size / 1024).toFixed(2)} KB` : "Supports PDF, DOC, DOCX"}
         </p>

@@ -1,27 +1,31 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 :root {
-  /* Brand Colors from Screenshot */
+  /* --- Light Mode Defaults --- */
   --primary: #4318FF;
-  --primary-light: #E9E3FF;
-  --bg-page: #F4F7FE;
-  --white: #FFFFFF;
+  --primary-hover: #2B00D6;
+  --primary-gradient: linear-gradient(180deg, #7F56D9 0%, #5B21B6 100%);
   
-  /* Text Colors */
-  --text-main: #2B3674;
-  --text-light: #A3AED0;
+  --bg-page: #F4F7FE;
+  --bg-white: #FFFFFF;
+  
+  --text-main: #2B3674;  /* Dark Navy */
+  --text-light: #A3AED0; /* Grey */
+  --text-dark: #2B3674;  /* Alias */
+  
+  --card-shadow: 0px 18px 40px rgba(112, 144, 176, 0.12);
   
   /* Status Colors */
+  --success: #05CD99;
   --green: #05CD99;
   --green-bg: #E6FAF5;
+  --warning: #FFB547;
   --orange: #FFB547;
-  --orange-bg: #FFF7E8;
+  --danger: #E31A1A;
   --red: #E31A1A;
   --red-bg: #FFEEEE;
-  --purple-icon: #7551FF;
-
-  /* UI Props */
-  --card-shadow: 0px 18px 40px rgba(112, 144, 176, 0.12);
+  --purple-light: #E9E3FF;
+  
   --border-radius: 20px;
 }
 
@@ -32,9 +36,12 @@ body {
   background-color: var(--bg-page);
   color: var(--text-main);
   -webkit-font-smoothing: antialiased;
+  
+  /* Smooth transition for Theme Switch */
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Layout */
+/* --- LAYOUT (Sidebar + Content) --- */
 .app-layout {
   display: flex;
   height: 100vh;
@@ -46,14 +53,69 @@ body {
   overflow-y: auto;
   padding: 30px;
   background-color: var(--bg-page);
+  transition: background-color 0.3s ease;
 }
 
-/* Utilities */
-h1 { font-size: 34px; font-weight: 700; margin: 0 0 5px 0; color: var(--text-main); }
-h2 { font-size: 24px; font-weight: 700; margin: 0 0 15px 0; }
-h3 { font-size: 18px; font-weight: 700; margin: 0; }
-p { color: var(--text-light); margin: 0; }
+/* --- DARK MODE OVERRIDES --- */
+body.dark-mode {
+  /* 1. Darker Backgrounds */
+  --bg-page: #0B1437;   /* Deep Navy */
+  --bg-white: #111C44;  /* Card Background */
 
+  /* 2. White Text */
+  --text-main: #FFFFFF; 
+  --text-dark: #FFFFFF; 
+  
+  /* 3. Lighter Grey for readability */
+  --text-light: #A3AED0; 
+  
+  /* 4. Remove Shadows (Flat look is better for dark mode) */
+  --card-shadow: none;
+}
+
+/* --- FORCE ELEMENTS TO UPDATE --- */
+/* This ensures all headings and text pick up the white color variable */
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode h4,
+body.dark-mode h5,
+body.dark-mode h6,
+body.dark-mode p,
+body.dark-mode span,
+body.dark-mode div,
+body.dark-mode li,
+body.dark-mode strong,
+body.dark-mode label {
+  color: var(--text-main);
+  transition: color 0.3s ease;
+}
+
+/* --- UPDATE CARDS --- */
+/* Ensures cards switch to the dark background color */
+.card, .card-component, .pricing-card, .insight-card {
+  background-color: var(--bg-white) !important;
+  color: var(--text-main) !important;
+  transition: background-color 0.3s ease;
+}
+
+/* --- FIX INPUTS & FORMS --- */
+body.dark-mode input,
+body.dark-mode select,
+body.dark-mode textarea {
+  background-color: #1B254B !important;
+  color: #FFFFFF !important;
+  border-color: #2B3674;
+}
+
+/* --- FIX ICONS --- */
+body.dark-mode svg {
+  /* Only override if they don't have a specific color class */
+  /* color: var(--text-main); */ 
+}
+
+/* --- UTILITIES --- */
+h1, h2, h3, h4, p { margin: 0; }
 .flex-row { display: flex; align-items: center; }
 .flex-between { display: flex; justify-content: space-between; align-items: center; }
 .flex-col { display: flex; flex-direction: column; }

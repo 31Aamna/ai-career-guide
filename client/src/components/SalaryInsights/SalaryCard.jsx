@@ -1,21 +1,42 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Card from '../UI/Card';
+import { UserContext } from '../../context/UserContext';
 
-const SalaryCard = () => (
-  <Card style={{background:'linear-gradient(135deg, #fff 0%, #F6F8FD 100%)', border:'1px solid var(--primary)'}}>
-    <div className="flex-between">
-      <div>
-        <p style={{fontSize:'12px', fontWeight:'600', textTransform:'uppercase'}}>Your Expected Salary</p>
-        <h1 style={{fontSize:'42px', margin:'10px 0'}}>$120,000<span style={{fontSize:'16px', color:'var(--text-light)'}}>/yr</span></h1>
+const SalaryCard = ({ salary }) => {
+  const { isDarkMode } = useContext(UserContext);
+
+  return (
+    <Card className="salary-page-card" style={{ 
+      // Dynamic Background based on Theme
+      background: isDarkMode 
+        ? 'var(--bg-white)' 
+        : 'linear-gradient(180deg, #FFFFFF 0%, #FDFDFD 100%)', 
+      border: '1px solid var(--primary)' 
+    }}>
+      <div className="salary-value-row">
+        <div>
+          <p style={{fontSize: '13px', color: 'var(--text-light)', textTransform: 'uppercase', fontWeight: 700, letterSpacing:'0.5px'}}>
+            Your Expected Salary
+          </p>
+          <h1 className="big-salary">
+            ${salary.toLocaleString()}<span style={{fontSize: '20px', color: 'var(--text-light)', fontWeight: 500}}>/yr</span>
+          </h1>
+        </div>
+        
+        <div className="top-badge">
+          <span style={{fontSize: '24px'}}>👑</span>
+          <div className="badge-text">
+            <h4>Top 15%</h4>
+            <span>HIGH EARNER</span>
+          </div>
+        </div>
       </div>
-      <div style={{background:'#FFF7E8', padding:'10px 20px', borderRadius:'30px', display:'flex', alignItems:'center', gap:'10px', border:'1px solid #FFB547'}}>
-        <span>👑</span>
-        <div><h4 style={{margin:0, color:'#B7791F'}}>Top 15%</h4><span style={{fontSize:'9px', color:'#B7791F'}}>HIGH EARNER</span></div>
+
+      <div className="status-row">
+        <span style={{fontSize:'18px'}}>✅</span> Above Market Average
       </div>
-    </div>
-    <div className="flex-row gap-10 mt-20" style={{color:'var(--green)', fontWeight:'600', fontSize:'13px', paddingTop:'20px', borderTop:'1px solid #E0E5F2'}}>
-      <span>✅</span> Above Market Average
-    </div>
-  </Card>
-);
+    </Card>
+  );
+};
+
 export default SalaryCard;
