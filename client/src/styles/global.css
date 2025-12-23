@@ -1,32 +1,29 @@
+/* client/src/styles/global.css */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 :root {
-  /* --- Light Mode Defaults --- */
+  /* --- Colors --- */
   --primary: #4318FF;
   --primary-hover: #2B00D6;
-  --primary-gradient: linear-gradient(180deg, #7F56D9 0%, #5B21B6 100%);
+  --primary-light: #E9E3FF;
   
-  --bg-page: #F4F7FE;
-  --bg-white: #FFFFFF;
+  --bg-page: #F0F2F5;  /* Light Grey Background */
+  --bg-white: #FFFFFF; /* Pure White Containers */
   
-  --text-main: #2B3674;  /* Dark Navy */
-  --text-light: #A3AED0; /* Grey */
-  --text-dark: #2B3674;  /* Alias */
+  --text-main: #2B3674;  /* Dark Navy Text */
+  --text-light: #A3AED0; /* Grey Text */
   
+  --border-color: #E0E5F2;
   --card-shadow: 0px 18px 40px rgba(112, 144, 176, 0.12);
-  
+  --border-radius: 20px;
+
   /* Status Colors */
-  --success: #05CD99;
   --green: #05CD99;
   --green-bg: #E6FAF5;
-  --warning: #FFB547;
-  --orange: #FFB547;
-  --danger: #E31A1A;
   --red: #E31A1A;
   --red-bg: #FFEEEE;
-  --purple-light: #E9E3FF;
-  
-  --border-radius: 20px;
+  --orange: #FFB547;
+  --orange-bg: #FFF7E8;
 }
 
 body {
@@ -36,93 +33,141 @@ body {
   background-color: var(--bg-page);
   color: var(--text-main);
   -webkit-font-smoothing: antialiased;
-  
-  /* Smooth transition for Theme Switch */
+  overflow: hidden; /* App handles scrolling */
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* --- LAYOUT (Sidebar + Content) --- */
+/* --- MAIN APP LAYOUT (Sidebar Left | Content Right) --- */
 .app-layout {
-  display: flex;
+  display: flex;          /* Horizontal Layout */
+  flex-direction: row;    /* Force Row direction */
   height: 100vh;
+  width: 100vw;
   overflow: hidden;
 }
 
-.main-content {
-  flex: 1;
+/* Sidebar Fixed Width */
+.sidebar {
+  width: 280px;
+  flex-shrink: 0;
+  height: 100%;
   overflow-y: auto;
+  z-index: 10;
+}
+
+/* Main Content Area */
+.main-content {
+  flex: 1;                /* Take remaining width */
+  height: 100%;
+  overflow-y: auto;       /* Independent scrolling */
   padding: 30px;
   background-color: var(--bg-page);
+  position: relative;
+  transition: background-color 0.3s ease;
+}
+
+/* --- RESPONSIVE GRID SYSTEMS --- */
+
+/* 2 Columns: Side-by-Side (Flexible) */
+.grid-2 {
+  display: grid;
+  /* If space allows, split 2fr 1fr. If small, stack. */
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); 
+  gap: 30px;
+  align-items: start;
+  width: 100%;
+}
+
+/* 3 Columns: Side-by-Side */
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 25px;
+  width: 100%;
+}
+
+/* 4 Columns: Small Cards (Stats) */
+.grid-4 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+  width: 100%;
+}
+
+/* Flex Column Helper (Vertical Stack inside grids) */
+.flex-col {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  height: 100%;
+}
+
+/* Flex Row Helper (Horizontal Align) */
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 15px;
+}
+
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+/* --- UTILITIES --- */
+h1, h2, h3, h4, p { margin: 0; }
+.mb-20 { margin-bottom: 20px; }
+.mb-30 { margin-bottom: 30px; }
+
+.card, .card-component {
+  background-color: var(--bg-white);
+  border-radius: var(--border-radius);
+  padding: 24px;
+  box-shadow: var(--card-shadow);
   transition: background-color 0.3s ease;
 }
 
 /* --- DARK MODE OVERRIDES --- */
 body.dark-mode {
-  /* 1. Darker Backgrounds */
-  --bg-page: #0B1437;   /* Deep Navy */
-  --bg-white: #111C44;  /* Card Background */
-
-  /* 2. White Text */
-  --text-main: #FFFFFF; 
-  --text-dark: #FFFFFF; 
-  
-  /* 3. Lighter Grey for readability */
-  --text-light: #A3AED0; 
-  
-  /* 4. Remove Shadows (Flat look is better for dark mode) */
+  --bg-page: #0B1437;
+  --bg-white: #111C44;
+  --text-main: #FFFFFF;
+  --text-light: #A3AED0;
+  --border-color: #2B3674;
   --card-shadow: none;
 }
 
-/* --- FORCE ELEMENTS TO UPDATE --- */
-/* This ensures all headings and text pick up the white color variable */
-body.dark-mode h1,
-body.dark-mode h2,
-body.dark-mode h3,
-body.dark-mode h4,
-body.dark-mode h5,
-body.dark-mode h6,
-body.dark-mode p,
-body.dark-mode span,
-body.dark-mode div,
-body.dark-mode li,
-body.dark-mode strong,
-body.dark-mode label {
+/* Force dark mode elements */
+body.dark-mode h1, body.dark-mode h2, body.dark-mode h3, 
+body.dark-mode p, body.dark-mode span, body.dark-mode div, 
+body.dark-mode li {
   color: var(--text-main);
-  transition: color 0.3s ease;
 }
 
-/* --- UPDATE CARDS --- */
-/* Ensures cards switch to the dark background color */
-.card, .card-component, .pricing-card, .insight-card {
-  background-color: var(--bg-white) !important;
-  color: var(--text-main) !important;
-  transition: background-color 0.3s ease;
+body.dark-mode .text-light {
+  color: var(--text-light);
 }
 
-/* --- FIX INPUTS & FORMS --- */
-body.dark-mode input,
-body.dark-mode select,
-body.dark-mode textarea {
+body.dark-mode input, body.dark-mode select, body.dark-mode textarea {
   background-color: #1B254B !important;
-  color: #FFFFFF !important;
-  border-color: #2B3674;
+  color: white !important;
+  border-color: #2B3674 !important;
 }
 
-/* --- FIX ICONS --- */
-body.dark-mode svg {
-  /* Only override if they don't have a specific color class */
-  /* color: var(--text-main); */ 
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+  .app-layout {
+    flex-direction: column; /* Stack Sidebar on top for mobile */
+  }
+  .sidebar {
+    width: 100%;
+    height: auto;
+    padding: 15px;
+  }
+  .grid-2, .grid-3, .grid-4 {
+    grid-template-columns: 1fr; /* Force stack on small screens */
+  }
 }
-
-/* --- UTILITIES --- */
-h1, h2, h3, h4, p { margin: 0; }
-.flex-row { display: flex; align-items: center; }
-.flex-between { display: flex; justify-content: space-between; align-items: center; }
-.flex-col { display: flex; flex-direction: column; }
-.gap-10 { gap: 10px; }
-.gap-20 { gap: 20px; }
-.mb-20 { margin-bottom: 20px; }
-.mb-30 { margin-bottom: 30px; }
-
-.grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
-.grid-2 { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }

@@ -1,19 +1,34 @@
 import React from 'react';
 
-const Toggle = ({ enabled, onChange }) => {
+const Toggle = ({ enabled, onToggle }) => {
   return (
-    <button
-      onClick={() => onChange(!enabled)}
-      className={`${
-        enabled ? 'bg-indigo-600' : 'bg-gray-200'
-      } relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2`}
+    <div 
+      onClick={onToggle}
+      style={{
+        width: '44px', 
+        height: '24px', 
+        // Use global variables so it adapts to the theme automatically
+        background: enabled ? 'var(--primary)' : '#E0E5F2', 
+        borderRadius: '20px', 
+        position: 'relative', 
+        cursor: 'pointer', 
+        transition: 'background 0.3s ease',
+        flexShrink: 0
+      }}
     >
-      <span
-        className={`${
-          enabled ? 'translate-x-5' : 'translate-x-0'
-        } pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out`}
-      />
-    </button>
+      <div style={{
+        width: '18px', 
+        height: '18px', 
+        background: 'white', 
+        borderRadius: '50%',
+        position: 'absolute', 
+        top: '3px', 
+        // Slide logic
+        left: enabled ? '23px' : '3px', 
+        transition: 'left 0.3s ease', 
+        boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+      }}></div>
+    </div>
   );
 };
 

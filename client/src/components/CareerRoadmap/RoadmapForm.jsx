@@ -5,7 +5,7 @@ const RoadmapForm = ({ currentPos, setCurrentPos, targetGoal, setTargetGoal, onB
     <div className="roadmap-input-card">
       <div className="input-grid">
         
-        {/* 1. Current Position (Now Editable) */}
+        {/* 1. Current Position */}
         <div className="input-field-group">
           <label className="input-label">🎯 Current Position</label>
           <div className="input-wrapper">

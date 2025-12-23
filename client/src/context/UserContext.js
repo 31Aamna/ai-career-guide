@@ -3,83 +3,96 @@ import React, { createContext, useState, useEffect } from 'react';
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-  // Mock User Database
-  const mockUser = {
-    email: 'alex@career.ai',
-    password: 'password123',
-    name: 'Alex Johnson',
-    role: 'Frontend Developer',
-    avatar: 'A'
-  };
-
+  // 1. User State
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isPremium, setIsPremium] = useState(false);
-  
-  // Logic: First time user vs Returning user
-  // We simulate this: If they log in with the specific "demo" account, they are returning.
-  // Any other valid login is treated as "First Time".
-  const [isNewUser, setIsNewUser] = useState(true);
+  const [isNewUser, setIsNewUser] = useState(true); // Default to true
 
+  // 2. Load from LocalStorage on Start
   useEffect(() => {
-    // Check if session exists (Basic persistence)
-    const storedAuth = localStorage.getItem('careerai_auth');
-    if (storedAuth) {
-      setUser(JSON.parse(storedAuth));
+    const storedUser = localStorage.getItem('careerai_user');
+    const onboarded = localStorage.getItem('careerai_onboarded');
+
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
       setIsAuthenticated(true);
-      
-      // Check visited status
-      const visited = localStorage.getItem('careerai_visited');
-      setIsNewUser(!visited); 
+      // If they have onboarded before, they are NOT a new user
+      setIsNewUser(onboarded !== 'true'); 
     }
   }, []);
 
+  // 3. Login Action
   const login = (email, password) => {
-    // 1. Validation Logic
-    if (email === mockUser.email && password === mockUser.password) {
-      // Success: Returning User Scenario
-      const userData = { ...mockUser };
+    // Check against mock "Database" (LocalStorage)
+    const dbUser = JSON.parse(localStorage.getItem('careerai_db_user'));
+    
+    // Check registered user OR hardcoded demo user
+    if ((dbUser && dbUser.email === email && dbUser.password === password) || 
+        (email === 'demo@test.com' && password === '123456')) {
+      
+      const userData = dbUser || { name: 'Demo User', email: 'demo@test.com', role: 'Dev' };
       setUser(userData);
       setIsAuthenticated(true);
-      setIsNewUser(false); // They have an account, so show standard dash
-      localStorage.setItem('careerai_auth', JSON.stringify(userData));
-      return { success: true };
-    } 
-    
-    // 2. Allow a "New User" test case
-    if (email.includes('@') && password.length >= 6) {
-      // Success: New User Scenario
-      const newUser = { name: 'New User', email, role: 'Aspiring Dev', avatar: 'N' };
-      setUser(newUser);
-      setIsAuthenticated(true);
-      setIsNewUser(true); // Show Welcome Dash
-      localStorage.setItem('careerai_auth', JSON.stringify(newUser));
+      localStorage.setItem('careerai_user', JSON.stringify(userData));
+      
+      // Returning user? Check onboarding status
+      const onboarded = localStorage.getItem('careerai_onboarded');
+      setIsNewUser(onboarded !== 'true');
+      
       return { success: true };
     }
+    return { success: false, message: 'Invalid credentials' };
+  };
 
-    return { success: false, message: "Invalid credentials. Try alex@career.ai / password123" };
+  // 4. Register Action
+  const register = (name, email, password) => {
+    const newUser = { name, email, password, role: 'Aspiring Dev', avatar: 'N' };
+    
+    // Save to "Database" and "Session"
+    localStorage.setItem('careerai_db_user', JSON.stringify(newUser));
+    localStorage.setItem('careerai_user', JSON.stringify(newUser));
+    
+    setUser(newUser);
+    setIsAuthenticated(true);
+    
+    // NEW REGISTRATION = NEW USER (Show Welcome Dashboard)
+    setIsNewUser(true);
+    localStorage.removeItem('careerai_onboarded');
   };
 
   const logout = () => {
     setIsAuthenticated(false);
     setUser(null);
-    localStorage.removeItem('careerai_auth');
+    localStorage.removeItem('careerai_user');
   };
 
-  const togglePremium = () => setIsPremium(prev => !prev);
-  const activatePremium = () => setIsPremium(true);
-  
-  const completeOnboarding = () => {
+  // Call this when they click a "Get Started" card
+  const markFeatureUsed = () => {
     setIsNewUser(false);
-    localStorage.setItem('careerai_visited', 'true');
+    localStorage.setItem('careerai_onboarded', 'true');
   };
 
-  const updateUserProfile = (data) => setUser(prev => ({ ...prev, ...data }));
+  const togglePremium = () => setIsPremium(p => !p);
+  const activatePremium = () => setIsPremium(true);
+  const updateUserProfile = (d) => setUser(prev => ({...prev, ...d}));
+
+  // Dark Mode Logic (Optional if needed)
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const toggleTheme = () => {
+    setIsDarkMode(prev => {
+      const mode = !prev;
+      if(mode) document.body.classList.add('dark-mode');
+      else document.body.classList.remove('dark-mode');
+      return mode;
+    });
+  };
 
   return (
     <UserContext.Provider value={{ 
-      user, isAuthenticated, isPremium, isNewUser, 
-      login, logout, togglePremium, activatePremium, completeOnboarding, updateUserProfile 
+      user, isAuthenticated, isPremium, isNewUser, isDarkMode,
+      login, register, logout, markFeatureUsed, 
+      togglePremium, activatePremium, updateUserProfile, toggleTheme
     }}>
       {children}
     </UserContext.Provider>

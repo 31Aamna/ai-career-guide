@@ -5,16 +5,15 @@ const TimelineItem = ({ status, title, phase, desc }) => (
     <div className="timeline-icon">
       {status === 'completed' && '✓'}
       {status === 'locked' && '🔒'}
-      {/* Active uses CSS ::after for the dot */}
+      {/* Active dot is handled via CSS ::after */}
     </div>
+    
     <div style={{width: '100%'}}>
       <div className="step-header">
         <h3>{title}</h3>
         <span className={`phase-tag ${status === 'active' ? 'active' : ''}`}>{phase}</span>
       </div>
-      <p style={{fontSize: '13px', color: 'var(--text-light)', lineHeight: '1.6', marginTop: '5px'}}>
-        {desc}
-      </p>
+      <p>{desc}</p>
     </div>
   </div>
 );

@@ -1,34 +1,39 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import { UserContext } from '../context/UserContext';
+import { useNavigate } from 'react-router-dom';
 import { 
   User, Bell, HelpCircle, Shield, Camera, 
   Settings as SettingsIcon, ChevronDown, ChevronUp,
   FileText, TrendingUp, Map, Users, CreditCard,
-  EyeOff, Lock, Database
+  EyeOff, Lock, Database, LogOut
 } from 'lucide-react';
 
 const SettingsPage = () => {
-  // 1. Get Global State (User Data & Theme Logic)
-  const { user, updateUserProfile, isDarkMode, toggleTheme } = useContext(UserContext);
+  // 1. Get Global State
+  const { user, updateUserProfile, isDarkMode, toggleTheme, logout } = useContext(UserContext);
+  const navigate = useNavigate();
+  const fileInputRef = useRef(null);
   
-  // 2. Local State for Tabs and Forms
+  // 2. Local State
   const [activeTab, setActiveTab] = useState('identity');
   const [formData, setFormData] = useState({
-    name: user.name || '',
-    email: user.email || '',
-    bio: user.bio || ''
+    name: user?.name || '',
+    email: user?.email || '',
+    bio: user?.bio || '',
+    avatar: user?.avatar || null
   });
 
-  // Sync form data if user context updates
+  // Sync state if user context changes
   useEffect(() => {
     setFormData({
-      name: user.name || '',
-      email: user.email || '',
-      bio: user.bio || ''
+      name: user?.name || '',
+      email: user?.email || '',
+      bio: user?.bio || '',
+      avatar: user?.avatar || null
     });
   }, [user]);
 
-  // --- NOTIFICATIONS DATA ---
+  // --- MOCK DATA FOR OTHER TABS ---
   const [notifications, setNotifications] = useState([
     { id: 1, title: "Resume Analysis", desc: "Get notified when AI finishes reviewing your resume.", icon: <FileText size={18} color="white"/>, bg: "#4318FF", enabled: true },
     { id: 2, title: "Salary Insights", desc: "New market data and salary trends for your role.", icon: <TrendingUp size={18} color="white"/>, bg: "#7551FF", enabled: true },
@@ -37,7 +42,6 @@ const SettingsPage = () => {
     { id: 5, title: "Subscription & Payments", desc: "Manage billing alerts and plan change notifications.", icon: <CreditCard size={18} color="white"/>, bg: "#4318FF", enabled: true }
   ]);
 
-  // --- SUPPORT DATA ---
   const [openFaq, setOpenFaq] = useState(0);
   const faqs = [
     { q: "How does the AI Resume Review work?", a: "The AI analyzes your resume against industry-standard keywords and best practices, providing a percentage score and actionable suggestions." },
@@ -46,13 +50,32 @@ const SettingsPage = () => {
   ];
 
   // --- HANDLERS ---
-  const handleIdentityChange = (e) => {
+
+  const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleIdentitySave = () => {
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData(prev => ({ ...prev, avatar: reader.result }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleSave = () => {
     updateUserProfile(formData);
-    alert("Profile details updated successfully!");
+    alert("Settings saved successfully!");
+  };
+
+  // --- UPDATED LOGOUT LOGIC ---
+  const handleLogout = () => {
+    logout();
+    // Redirect to Dashboard (which will now show the Welcome/Guest view because isAuthenticated is false)
+    navigate('/'); 
   };
 
   const toggleNotification = (id) => {
@@ -65,22 +88,24 @@ const SettingsPage = () => {
 
   // --- SUB-COMPONENTS ---
 
-  const SidebarItem = ({ id, icon, label }) => {
+  const SidebarItem = ({ id, icon, label, isDanger }) => {
     const isActive = activeTab === id;
+    const baseColor = isDanger ? 'var(--red)' : (isActive ? 'var(--primary)' : 'var(--text-light)');
+    const bg = isDanger ? 'rgba(227, 26, 26, 0.05)' : (isActive ? 'var(--purple-light)' : 'transparent');
+
     return (
       <div 
-        onClick={() => setActiveTab(id)}
+        onClick={() => !isDanger && setActiveTab(id)}
         style={{
           display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 20px',
           borderRadius: '12px', cursor: 'pointer', marginBottom: '8px',
-          color: isActive ? 'var(--primary)' : 'var(--text-light)',
-          background: isActive ? 'var(--purple-light)' : 'transparent',
+          color: baseColor, background: bg,
           fontWeight: isActive ? '700' : '500', transition: '0.2s', position: 'relative'
         }}
       >
         {icon}
         <span>{label}</span>
-        {isActive && (
+        {isActive && !isDanger && (
           <div style={{ position: 'absolute', right: '15px', width: '6px', height: '6px', background: 'var(--primary)', borderRadius: '50%' }}></div>
         )}
       </div>
@@ -105,12 +130,12 @@ const SettingsPage = () => {
     </div>
   );
 
-  // --- MAIN RENDER ---
+  // --- RENDER ---
   return (
     <div style={{ display: 'flex', minHeight: '85vh', gap: '40px', paddingBottom: '40px' }}>
       
-      {/* --- SIDEBAR --- */}
-      <div style={{ width: '240px', flexShrink: 0 }}>
+      {/* 1. SETTINGS SIDEBAR */}
+      <div style={{ width: '240px', flexShrink: 0, display: 'flex', flexDirection: 'column' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '40px' }}>
           <div style={{ width: '40px', height: '40px', background: 'var(--primary)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', boxShadow: '0 4px 10px rgba(67, 24, 255, 0.4)' }}>
             <SettingsIcon size={22} />
@@ -121,88 +146,118 @@ const SettingsPage = () => {
           </div>
         </div>
 
-        <nav>
+        <nav style={{ flex: 1 }}>
           <SidebarItem id="identity" label="Identity" icon={<User size={18} />} />
           <SidebarItem id="alerts" label="Alerts" icon={<Bell size={18} />} />
           <SidebarItem id="support" label="Support" icon={<HelpCircle size={18} />} />
           <SidebarItem id="security" label="Security" icon={<Shield size={18} />} />
         </nav>
+
+        {/* LOGOUT BUTTON */}
+        <div onClick={handleLogout} style={{ marginTop: '20px', paddingTop: '20px', borderTop: '1px solid var(--border-color)' }}>
+           <SidebarItem id="logout" label="Log Out" icon={<LogOut size={18} />} isDanger={true} />
+        </div>
       </div>
 
-      {/* --- CONTENT AREA --- */}
+      {/* 2. CONTENT AREA */}
       <div style={{ flex: 1, maxWidth: '850px' }}>
         
         {/* === TAB 1: IDENTITY === */}
         {activeTab === 'identity' && (
-          <div className="animate-fade-in">
+          <div style={{animation: 'fadeIn 0.3s ease-in'}}>
             <div style={{ marginBottom: '30px' }}>
               <h1 style={{ fontSize: '28px', color: 'var(--text-main)', marginBottom: '8px' }}>Profile</h1>
               <p style={{ color: 'var(--text-light)', fontSize: '14px' }}>Manage your public identity and account details.</p>
             </div>
-            <div style={{ height: '1px', background: '#E0E5F2', marginBottom: '40px' }}></div>
+            <div style={{ height: '1px', background: 'var(--border-color)', marginBottom: '40px' }}></div>
 
             <div style={{ display: 'flex', gap: '40px', alignItems: 'flex-start' }}>
-              {/* Profile Pic */}
+              
+              {/* Profile Picture Upload */}
               <div style={{ position: 'relative' }}>
-                <div style={{ width: '100px', height: '100px', borderRadius: '50%', background: '#E0E5F2', border: '4px solid var(--white)', boxShadow: '0 10px 20px rgba(0,0,0,0.05)', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '32px', color: '#A3AED0' }}>
-                  {user.avatar || 'A'}
+                <div style={{ 
+                  width: '100px', height: '100px', borderRadius: '50%', 
+                  background: 'var(--bg-page)', border: '4px solid var(--bg-white)', 
+                  boxShadow: 'var(--card-shadow)', overflow: 'hidden', 
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', 
+                  fontSize: '32px', color: 'var(--text-light)' 
+                }}>
+                  {formData.avatar ? (
+                    <img src={formData.avatar} alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  ) : (
+                    formData.name.charAt(0) || 'A'
+                  )}
                 </div>
-                <button style={{ position: 'absolute', bottom: '0', right: '0', width: '30px', height: '30px', borderRadius: '50%', background: 'white', border: '1px solid #E0E5F2', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: 'var(--text-main)', boxShadow: '0 2px 5px rgba(0,0,0,0.1)' }}>
+                
+                <input type="file" ref={fileInputRef} onChange={handleImageUpload} hidden accept="image/*" />
+                
+                <button 
+                  onClick={() => fileInputRef.current.click()}
+                  style={{ 
+                    position: 'absolute', bottom: '0', right: '0', 
+                    width: '30px', height: '30px', borderRadius: '50%', 
+                    background: 'var(--bg-white)', border: '1px solid var(--border-color)', 
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', 
+                    cursor: 'pointer', color: 'var(--text-main)', boxShadow: '0 2px 5px rgba(0,0,0,0.1)' 
+                  }}
+                >
                   <Camera size={14} />
                 </button>
               </div>
 
-              {/* Form Fields */}
+              {/* Input Fields */}
               <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '20px' }}>
                 <div>
                   <label style={labelStyle}>DISPLAY NAME</label>
-                  <input name="name" type="text" value={formData.name} onChange={handleIdentityChange} style={inputStyle} />
+                  <input name="name" type="text" value={formData.name} onChange={handleInputChange} style={inputStyle} />
                 </div>
                 <div>
                   <label style={labelStyle}>EMAIL ADDRESS</label>
-                  <input name="email" type="email" value={formData.email} onChange={handleIdentityChange} style={inputStyle} />
+                  <input name="email" type="email" value={formData.email} onChange={handleInputChange} style={inputStyle} />
                 </div>
                 <div>
                   <label style={labelStyle}>BIO DESCRIPTION</label>
-                  <textarea name="bio" rows="3" value={formData.bio} onChange={handleIdentityChange} style={{ ...inputStyle, resize: 'none', lineHeight: '1.6' }} />
+                  <textarea name="bio" rows="3" value={formData.bio} onChange={handleInputChange} style={{ ...inputStyle, resize: 'none', lineHeight: '1.6' }} />
                 </div>
               </div>
             </div>
 
-            {/* DARK MODE TOGGLE */}
-            <div style={{ marginTop: '30px', background: 'var(--bg-white)', border: '1px solid #E0E5F2', padding: '15px 20px', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', boxShadow: 'var(--card-shadow)' }}>
+            {/* Appearance Toggle */}
+            <div style={{ marginTop: '30px', background: 'var(--bg-white)', border: '1px solid var(--border-color)', padding: '15px 20px', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', boxShadow: 'var(--card-shadow)' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
                 <div style={{ width: '36px', height: '36px', background: 'var(--purple-light)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--primary)' }}>
                   <SettingsIcon size={18} />
                 </div>
                 <div>
                   <h4 style={{ margin: 0, color: 'var(--text-main)', fontSize: '13px' }}>Appearance</h4>
-                  <p style={{ margin: 0, color: 'var(--text-light)', fontSize: '11px' }}>Toggle between Light and Dark mode</p>
+                  <p style={{ margin: 0, color: 'var(--text-light)', fontSize: '11px' }}>
+                    {isDarkMode ? 'Dark Mode Active 🌙' : 'Light Mode Active ☀️'}
+                  </p>
                 </div>
               </div>
               <ToggleSwitch enabled={isDarkMode} onToggle={toggleTheme} />
             </div>
             
             <div style={{textAlign:'right', marginTop:'20px'}}>
-               <button onClick={handleIdentitySave} style={{padding: '10px 25px', background: 'var(--primary)', color:'white', border:'none', borderRadius:'10px', fontWeight:600, cursor:'pointer'}}>Save Changes</button>
+               <button onClick={handleSave} style={{padding: '10px 25px', background: 'var(--primary)', color:'white', border:'none', borderRadius:'10px', fontWeight:600, cursor:'pointer'}}>Save Changes</button>
             </div>
           </div>
         )}
 
         {/* === TAB 2: ALERTS === */}
         {activeTab === 'alerts' && (
-          <div className="animate-fade-in">
+          <div style={{animation: 'fadeIn 0.3s ease-in'}}>
             <div style={{ marginBottom: '30px' }}>
               <h1 style={{ fontSize: '28px', color: 'var(--text-main)', marginBottom: '8px' }}>Notifications</h1>
               <p style={{ color: 'var(--text-light)', fontSize: '14px' }}>Customize how we keep you updated.</p>
             </div>
-            <div style={{ height: '1px', background: '#E0E5F2', marginBottom: '30px' }}></div>
+            <div style={{ height: '1px', background: 'var(--border-color)', marginBottom: '30px' }}></div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
               {notifications.map(notif => (
-                <div key={notif.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px', border: '1px solid #E0E5F2', borderRadius: '16px', background: 'var(--bg-white)', boxShadow: '0 2px 5px rgba(0,0,0,0.02)' }}>
+                <div key={notif.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px', border: '1px solid var(--border-color)', borderRadius: '16px', background: 'var(--bg-white)', boxShadow: 'var(--card-shadow)' }}>
                   <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
-                    <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: notif.enabled ? notif.bg : '#E0E5F2', display: 'flex', alignItems: 'center', justifyContent: 'center', color: notif.enabled ? 'white' : '#A3AED0' }}>
+                    <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: notif.enabled ? notif.bg : 'var(--bg-page)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: notif.enabled ? 'white' : 'var(--text-light)' }}>
                       {notif.icon}
                     </div>
                     <div>
@@ -219,27 +274,27 @@ const SettingsPage = () => {
 
         {/* === TAB 3: SUPPORT === */}
         {activeTab === 'support' && (
-          <div className="animate-fade-in">
+          <div style={{animation: 'fadeIn 0.3s ease-in'}}>
             <div style={{ marginBottom: '30px' }}>
               <h1 style={{ fontSize: '28px', color: 'var(--text-main)', marginBottom: '8px' }}>Support</h1>
               <p style={{ color: 'var(--text-light)', fontSize: '14px' }}>Common questions and platform help.</p>
             </div>
-            <div style={{ height: '1px', background: '#E0E5F2', marginBottom: '30px' }}></div>
+            <div style={{ height: '1px', background: 'var(--border-color)', marginBottom: '30px' }}></div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
               {faqs.map((item, index) => (
-                <div key={index} style={{ border: '1px solid #E0E5F2', borderRadius: '16px', background: 'var(--bg-white)', overflow: 'hidden' }}>
+                <div key={index} style={{ border: '1px solid var(--border-color)', borderRadius: '16px', background: 'var(--bg-white)', overflow: 'hidden' }}>
                   <div 
                     onClick={() => toggleFaq(index)}
                     style={{ padding: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', background: openFaq === index ? 'var(--bg-page)' : 'var(--bg-white)' }}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-                      <div style={{ width: '32px', height: '32px', background: openFaq === index ? 'var(--primary)' : 'var(--purple-light)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: openFaq === index ? 'white' : 'var(--primary)' }}>
+                      <div style={{ width: '32px', height: '32px', background: openFaq === index ? 'var(--primary)' : 'var(--primary-light)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: openFaq === index ? 'white' : 'var(--primary)' }}>
                         <HelpCircle size={16} />
                       </div>
                       <span style={{ fontWeight: 600, fontSize: '14px', color: 'var(--text-main)' }}>{item.q}</span>
                     </div>
-                    {openFaq === index ? <ChevronUp size={18} color="#A3AED0" /> : <ChevronDown size={18} color="#A3AED0" />}
+                    {openFaq === index ? <ChevronUp size={18} color="var(--text-light)" /> : <ChevronDown size={18} color="var(--text-light)" />}
                   </div>
                   {openFaq === index && (
                     <div style={{ padding: '0 20px 20px 67px', fontSize: '13px', color: 'var(--text-light)', lineHeight: '1.6' }}>
@@ -254,12 +309,12 @@ const SettingsPage = () => {
 
         {/* === TAB 4: SECURITY === */}
         {activeTab === 'security' && (
-          <div className="animate-fade-in">
+          <div style={{animation: 'fadeIn 0.3s ease-in'}}>
             <div style={{ marginBottom: '30px' }}>
               <h1 style={{ fontSize: '28px', color: 'var(--text-main)', marginBottom: '8px' }}>Security</h1>
               <p style={{ color: 'var(--text-light)', fontSize: '14px' }}>Data privacy and account security.</p>
             </div>
-            <div style={{ height: '1px', background: '#E0E5F2', marginBottom: '30px' }}></div>
+            <div style={{ height: '1px', background: 'var(--border-color)', marginBottom: '30px' }}></div>
 
             <div style={{ background: 'var(--bg-white)', borderRadius: '20px', padding: '30px', boxShadow: 'var(--card-shadow)' }}>
               <h3 style={{ fontSize: '16px', marginBottom: '10px', color: 'var(--text-main)' }}>Privacy Policy Summary</h3>
@@ -280,13 +335,14 @@ const SettingsPage = () => {
         )}
 
       </div>
+      <style>{`@keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }`}</style>
     </div>
   );
 };
 
-// --- HELPER COMPONENTS FOR SECURITY TAB ---
+// --- HELPER COMPONENTS ---
 const SecurityCard = ({ icon, title, desc }) => (
-  <div style={{ textAlign: 'center', padding: '20px', border: '1px solid #E0E5F2', borderRadius: '16px', background: 'var(--bg-page)' }}>
+  <div style={{ textAlign: 'center', padding: '20px', border: '1px solid var(--border-color)', borderRadius: '16px', background: 'var(--bg-page)' }}>
     <div style={{ width: '50px', height: '50px', background: 'var(--bg-white)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 15px', color: 'var(--primary)', boxShadow: '0 4px 10px rgba(0,0,0,0.05)' }}>
       {icon}
     </div>
@@ -307,16 +363,8 @@ const SecurityListItem = ({ num, title, desc }) => (
   </div>
 );
 
-// --- CSS Objects for Consistency ---
-const labelStyle = {
-  display: 'block', fontSize: '11px', fontWeight: '700', color: 'var(--text-light)',
-  marginBottom: '8px', letterSpacing: '0.5px'
-};
-
-const inputStyle = {
-  width: '100%', padding: '14px 16px', borderRadius: '12px', border: '1px solid #E0E5F2',
-  fontSize: '14px', color: 'var(--text-main)', background: 'var(--bg-white)', outline: 'none',
-  fontFamily: 'Inter, sans-serif'
-};
+// --- STYLES ---
+const labelStyle = { display: 'block', fontSize: '11px', fontWeight: '700', color: 'var(--text-light)', marginBottom: '8px', letterSpacing: '0.5px' };
+const inputStyle = { width: '100%', padding: '14px 16px', borderRadius: '12px', border: '1px solid var(--border-color)', fontSize: '14px', color: 'var(--text-main)', background: 'var(--bg-white)', outline: 'none', fontFamily: 'Inter, sans-serif' };
 
 export default SettingsPage;

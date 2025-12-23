@@ -1,18 +1,20 @@
-/* Container & Global Header */
+/* client/src/components/CareerRoadmap/CareerRoadmap.css */
+
 .roadmap-container {
   max-width: 1200px;
   margin: 0 auto;
 }
 
+/* --- Header --- */
 .roadmap-header {
-  text-align: center;
-  margin-bottom: 40px;
+  text-align: left;
+  margin-bottom: 20px;
 }
 
 .roadmap-header h1 {
   font-size: 32px;
   color: var(--text-main);
-  margin-bottom: 8px;
+  margin-bottom: 5px;
 }
 
 .roadmap-header p {
@@ -26,39 +28,38 @@
 }
 
 .no-context-badge {
-  background: #FFF8E6;
-  color: #D97706;
+  background: var(--orange-bg);
+  color: #B7791F;
   padding: 8px 15px;
   border-radius: 12px;
-  font-size: 13px;
-  font-weight: bold;
+  font-size: 12px;
+  font-weight: 700;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 5px;
+  border: 1px solid var(--orange);
 }
 
 /* --- Input Card --- */
 .roadmap-input-card {
-  background: rgb(255, 255, 255);
-  border-radius: var(--border-radius);
+  background: var(--bg-white);
+  border-radius: 20px;
   padding: 30px;
   box-shadow: var(--card-shadow);
   margin-bottom: 40px;
-  transition: background-color 0.3s ease;
+  border: 1px solid var(--border-color, transparent);
 }
 
 .input-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 25px;
-  margin-bottom: 25px;
+  gap: 30px;
+  margin-bottom: 30px;
 }
 
-.input-label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 14px;
+.input-field-group .input-label {
+  display: block;
+  font-size: 13px;
   font-weight: 700;
   color: var(--text-main);
   margin-bottom: 10px;
@@ -67,17 +68,20 @@
 .input-wrapper {
   background: var(--bg-page);
   border-radius: 12px;
-  padding: 14px 18px;
-  transition: background-color 0.3s ease;
+  padding: 12px 15px;
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--border-color, transparent);
 }
 
 .input-wrapper input {
   background: transparent;
   border: none;
-  outline: none;
   width: 100%;
-  font-size: 15px;
+  font-size: 14px;
   color: var(--text-main);
+  font-weight: 500;
+  outline: none;
 }
 
 .btn-build {
@@ -85,17 +89,19 @@
   color: white;
   border: none;
   padding: 12px 25px;
-  border-radius: 12px;
+  border-radius: 10px;
   font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 10px;
-  cursor: pointer;
-  transition: transform 0.2s;
+  gap: 8px;
+  transition: 0.2s;
 }
 
 .btn-build:hover {
   transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(67, 24, 255, 0.2);
 }
 
 .tip-text {
@@ -104,47 +110,58 @@
   font-style: italic;
 }
 
-/* --- Learning Path Card (Left) --- */
+/* --- MAIN LAYOUT GRID (Fixes the stacking issue) --- */
+.roadmap-content-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr; /* Left is 2x wider than Right */
+  gap: 30px;
+  align-items: start;
+}
+
+/* Responsive: Stack on mobile */
+@media (max-width: 1000px) {
+  .roadmap-content-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+/* --- Timeline Card --- */
 .learning-path-card {
-  background: white;
-  border-radius: var(--border-radius);
-  padding: 40px;
+  background: var(--bg-white);
+  border-radius: 20px;
+  padding: 25px;
   box-shadow: var(--card-shadow);
-  height: fit-content;
-  transition: background-color 0.3s ease;
+  border: 1px solid var(--border-color, transparent);
 }
 
-.learning-path-card h2 {
-  font-size: 24px;
-  margin-bottom: 30px;
-  color: var(--text-main);
-}
-
-/* Timeline Logic */
 .timeline {
+  display: flex;
+  flex-direction: column;
   position: relative;
-  padding-left: 20px;
+  padding-left: 10px;
 }
 
 .timeline-item {
+  display: flex;
+  gap: 25px;
+  padding-bottom: 50px;
   position: relative;
-  padding-left: 45px;
-  padding-bottom: 40px;
 }
 
-/* Vertical line connecting the steps */
 .timeline-item::before {
-  content: "";
+  content: '';
   position: absolute;
-  left: 14px;
-  top: 35px;
-  bottom: 0;
+  left: 20px;
+  top: 40px;
+  height: 100%;
   width: 2px;
-  background-color: #E0E5F2; /* You might want var(--border-color) for dark mode */
-}
-
-.timeline-item.completed::before {
-  background-color: var(--green);
+  background: var(--border-color);
 }
 
 .timeline-item:last-child::before {
@@ -152,19 +169,17 @@
 }
 
 .timeline-icon {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  background: var(--bg-white);
-  border: 2px solid #E0E5F2;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 2;
-  font-size: 14px;
+  font-size: 18px;
+  flex-shrink: 0;
+  background: var(--bg-white);
+  border: 2px solid var(--border-color);
   color: var(--text-light);
 }
 
@@ -172,16 +187,17 @@
   border-color: var(--green);
   color: var(--green);
 }
+.timeline-item.completed::before {
+  background: var(--green);
+}
 
 .timeline-item.active .timeline-icon {
   border-color: var(--primary);
   color: var(--primary);
 }
-
 .timeline-item.active .timeline-icon::after {
-  content: "";
-  width: 8px;
-  height: 8px;
+  content: '';
+  width: 10px; height: 10px;
   background: var(--primary);
   border-radius: 50%;
 }
@@ -189,138 +205,100 @@
 .step-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 10px;
+  align-items: center;
+  margin-bottom: 8px;
+  width: 100%;
 }
 
 .step-header h3 {
   font-size: 18px;
-  color: var(--text-main);
   margin: 0;
+  color: var(--text-main);
+  font-weight: 700;
 }
 
 .phase-tag {
   font-size: 12px;
   color: var(--text-light);
-  font-weight: 600;
+  font-weight: 500;
+  text-transform: uppercase;
 }
 
 .phase-tag.active {
   color: var(--primary);
+  font-weight: 700;
 }
 
 .timeline-item p {
   font-size: 14px;
-  line-height: 1.6;
   color: var(--text-light);
-  max-width: 90%;
+  line-height: 1.6;
   margin: 0;
+  max-width: 95%;
 }
 
 /* --- Right Side Cards --- */
 .side-card {
-  background: white;
-  border-radius: var(--border-radius);
-  padding: 30px;
+  background: var(--bg-white);
+  border-radius: 20px;
+  padding: 35px;
   box-shadow: var(--card-shadow);
-  margin-bottom: 25px;
-  transition: background-color 0.3s ease;
+  border: 1px solid var(--border-color, transparent);
 }
 
 .side-card h3 {
-  font-size: 18px;
-  margin-bottom: 5px;
+  font-size: 16px;
   color: var(--text-main);
+  margin: 0 0 5px 0;
+  font-weight: 700;
 }
 
 .card-subtitle {
-  font-size: 13px;
+  font-size: 12px;
   color: var(--text-light);
-  margin-bottom: 25px;
   display: block;
+  margin-bottom: 20px;
 }
 
 .skill-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  padding: 15px 0;
+  border-bottom: 1px solid var(--bg-page);
 }
+.skill-row:last-child { border-bottom: none; padding-bottom: 0; }
 
-.skill-info h4 {
-  font-size: 15px;
-  margin-bottom: 4px;
-  color: var(--text-main);
-  margin: 0;
-}
-
-.skill-info span {
-  font-size: 12px;
-  color: var(--text-light);
-}
+.skill-row h4 { font-size: 14px; margin: 0 0 4px 0; color: var(--text-main); }
+.skill-row span { font-size: 11px; color: var(--text-light); }
 
 .priority-badge {
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 800;
-  padding: 4px 10px;
+  padding: 4px 8px;
   border-radius: 6px;
   text-transform: uppercase;
+  min-width: 80px;
+  text-align: center;
 }
+.priority-badge.high { background: var(--orange-bg); color: #B7791F; }
+.priority-badge.critical { background: var(--red-bg); color: var(--red); }
 
-.priority-badge.high { background: #FFF7E8; color: #FFB547; }
-.priority-badge.critical { background: #FFEEEE; color: #E31A1A; }
-.priority-badge.medium { background: #E9E3FF; color: #4318FF; }
+.suggestion-card { border-left: 6px solid var(--primary); }
+.suggestion-content { font-size: 13px; line-height: 1.6; color: var(--text-main); font-style: italic; margin-top: 10px; }
 
-/* Suggestion Card */
-.suggestion-card {
-  border-left: 5px solid var(--primary);
-}
-
-.suggestion-content {
-  font-size: 14px;
-  line-height: 1.6;
-  color: var(--text-main);
-  font-style: italic;
-  margin: 0;
-}
-
-/* Learning Resources (Bottom) */
+/* --- Recommended Learning (Bottom Card) --- */
 .rec-learning-card {
-  background: white;
-  border-radius: var(--border-radius);
-  padding: 30px;
+  background: var(--bg-white);
+  border-radius: 20px;
+  padding: 16px 20px 8px; /* top | left-right | bottom */
+  margin-top: 10px;
   box-shadow: var(--card-shadow);
-  margin-top: 30px;
+  border: 1px solid var(--border-color, transparent);
+  width: 55%;
 }
 
-.learning-item {
-  display: flex;
-  gap: 15px;
-  margin-top: 20px;
-  align-items: flex-start;
-}
-
-.learning-icon {
-  font-size: 22px;
-  background: var(--bg-page);
-  width: 40px; height: 40px;
-  display: flex; alignItems: center; justifyContent: center;
-  border-radius: 10px;
-  flex-shrink: 0;
-}
-
-.learning-text h4 {
-  font-size: 14px;
-  margin: 0;
-  color: var(--text-main);
-}
-
-.learning-text p {
-  font-size: 12px;
-  margin-top: 3px;
-  color: var(--text-light);
-}
-
-/* Dark Mode Tweaks (If not using CSS Variables perfectly) */
-body.dark-mode .timeline-item::before { background-color: #2B3674; }
-body.dark-mode .timeline-icon { border-color: #2B3674; }
+.learning-item { display: flex; gap: 15px; align-items: flex-start; margin-top: 20px; }
+.learning-icon { font-size: 24px; background: var(--bg-page); width: 45px; height: 45px; display: flex; alignItems: center; justifyContent: center; border-radius: 12px; flex-shrink: 0; }
+.learning-text h4 { font-size: 14px; margin: 0 0 4px 0; color: var(--text-main); font-weight: 700; }
+.learning-text p { font-size: 12px; margin: 0; color: var(--text-light); }
