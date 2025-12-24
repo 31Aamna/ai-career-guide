@@ -3,6 +3,10 @@ import Card from '../components/UI/Card';
 import Button from '../components/UI/Button';
 import InterviewTopics from '../components/InterviewPrep/InterviewTopics';
 import TechnicalDomains from '../components/InterviewPrep/TechnicalDomains';
+import BehavioralDomainsPage from '../components/InterviewPrep/BehavioralDomainsPage';
+import HRDomainsPage from '../components/InterviewPrep/HRDomainsPage';
+import DSADomain from '../components/InterviewPrep/DSADomain';
+import PracticeLogic from '../components/InterviewPrep/PracticeLogic';
 import QuizSection from '../components/InterviewPrep/QuizSection';
 import CodingPractice from '../components/InterviewPrep/CodingPractice';
 import { interviewQuestions } from '../data/interviewData';
@@ -39,6 +43,11 @@ const InterviewPrepPage = () => {
 
   // --- HANDLERS ---
 
+  const startPractice = (category) => {
+    setActiveCategory(category);
+    setView('practice'); 
+  };
+
   const startQuiz = (category) => {
     if (interviewQuestions[category]) {
       setActiveCategory(category);
@@ -49,27 +58,49 @@ const InterviewPrepPage = () => {
     }
   };
 
-  const handleCategorySelect = (category) => {
-    if (category === 'Technical Questions') {
-      setView('technical');
-    } else if (category === 'Coding Questions') {
-      setView('coding');
-    } else {
-      startQuiz(category);
-    }
-  };
+
+  const handleCategorySelect = (categoryId, category) => {
+  if (categoryId === 'Technical Questions') {
+    setView('technical');
+  } else if (categoryId === 'Coding Questions') {
+    setView('coding');
+  } else if (category === 'Behavioral Questions') {
+    setView('behavioral');
+  } else if (category === 'HR Interview') {
+    setView('hr');
+  } else if (categoryId === 'DSA') {
+    setView('dsa')
+  }
+  else {
+    // This handles HR, DSA, etc.
+    startQuiz(categoryId);
+  }
+};
 
   const handleFinishQuiz = () => {
     setQuizScore(null);
     // Determine where to go back based on category type
     // If it was a sub-domain (like 'Web Development'), go back to technical grid
-    const isTechnicalSubDomain = ['Web Development', 'Backend Development', 'Databases', 'System Design', 'Cloud & DevOps', 'Testing', 'Programming Languages'].includes(activeCategory);
-    
-    if (isTechnicalSubDomain) {
-      setView('technical');
-    } else {
-      setView('main');
-    }
+    const isTechnicalSubDomain = ['Web Development','Mobile & Full-Stack', 'Backend Development', 'Databases', 'System Design', 'Cloud & DevOps', 'Testing', 'Programming Languages', 'AI & ML'].includes(activeCategory);
+    const isDSASubDomain = ['Arrays & Storage', 'Stacks & Queues', 'Linked Lists', 'Searching & Sorting'].includes(activeCategory);
+
+  //   if (isTechnicalSubDomain) {
+  //   setView('technical');
+  // } else if (activeCategory === 'Behavioral') {
+  //   setView('behavioral'); // Go back to Behavioral sub-menu
+  // } else if (activeCategory === 'HR') {
+  //   setView('hr'); // Go back to HR sub-menu
+  // } else {
+  //   setView('main');
+  // }
+
+  if (isTechnicalSubDomain) {
+    setView('technical');
+  } else if (isDSASubDomain) {
+    setView('dsa');
+  } else {
+    setView('main');
+  }
   };
 
   // --- VIEWS ---
@@ -83,7 +114,7 @@ const InterviewPrepPage = () => {
           <h2 className="mb-10">Quiz Completed!</h2>
           <p style={{color:'var(--text-light)', marginBottom:'30px'}}>You scored</p>
           <div style={{fontSize:'48px', fontWeight:'800', color:'var(--primary)', marginBottom:'30px'}}>
-            {quizScore} <span style={{fontSize:'18px', color:'var(--text-light)'}}>/ 5</span>
+            {quizScore} <span style={{fontSize:'18px', color:'var(--text-light)'}}>/ 10</span>
           </div>
           <Button fullWidth onClick={handleFinishQuiz}>Finish & Go Back</Button>
         </Card>
@@ -95,9 +126,10 @@ const InterviewPrepPage = () => {
     <div>
       {/* Header */}
       {view === 'main' && (
-        <div className="flex-between mb-30">
-          <h1>Interview Prep Pro</h1>
-          <span style={{background:'var(--green-bg)', color:'var(--green)', padding:'5px 10px', borderRadius:'10px', fontSize:'12px', fontWeight:'bold'}}>PREMIUM UNLOCKED</span>
+        <div className="flex-between mb-30" style={{textAlign: 'center', marginBottom: '40px', display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '20px'}}>
+          <h1>Interview <span style={{color:'var(--primary)'}}>Prep Pro</span></h1>
+          <p>Master Technical Interviews With Curated Questions Across All Domains</p>
+          {/* <span style={{background:'var(--green-bg)', color:'var(--green)', padding:'5px 10px', borderRadius:'10px', fontSize:'12px', fontWeight:'bold'}}>PREMIUM UNLOCKED</span> */}
         </div>
       )}
 
@@ -108,10 +140,13 @@ const InterviewPrepPage = () => {
 
       {/* Technical Domains Grid */}
       {view === 'technical' && (
+        <>
+        <Button variant="outline" onClick={() => setView('main')} style={{marginBottom:'20px', fontSize:'30px'}}> ←  Back to Topics </Button>
         <TechnicalDomains 
           onSelectDomain={startQuiz} 
           onBack={() => setView('main')} 
         />
+        </>
       )}
 
       {/* Quiz Interface */}
@@ -131,6 +166,51 @@ const InterviewPrepPage = () => {
           <CodingPractice />
         </>
       )}
+
+      {/* Behavioral Domains Grid */}
+      {view === 'behavioral' && (
+        <>
+        <Button variant="outline" onClick={() => setView('main')} style={{marginBottom:'20px', fontSize:'30px'}}> ←  Back to Topics </Button>
+        <BehavioralDomainsPage 
+        onSelectDomain={startQuiz} 
+        onBack={() => setView('main')} 
+        />
+        </>
+      )}
+
+      {/* HR Domains Grid */}
+      {view === 'hr' && (
+        <>
+        <Button variant="outline" onClick={() => setView('main')} style={{marginBottom:'20px', fontSize:'30px'}}> ←  Back to Topics </Button>
+        <HRDomainsPage 
+        onSelectDomain={startQuiz} 
+        onBack={() => setView('main')} 
+        />
+        </>
+      )}
+
+      {/* DSA Domains Grid */}
+      {view === 'dsa' && (
+        <>
+        <Button variant="outline" onClick={() => setView('main')} style={{marginBottom:'20px', fontSize:'30px'}}> ←  Back to Topics </Button>
+        <DSADomain 
+        onSelectDomain={startPractice} 
+        onBack={() => setView('main')} 
+        />
+        </>
+      )}
+
+      {/* DSA Practice Domains Grid */}
+      {/* The New Fixed View */}
+      {view === 'practice' && (
+        <PracticeLogic 
+          category={activeCategory}
+          // The || [] here is another layer of defense against the "map" error
+          questions={interviewQuestions[activeCategory] || []} 
+          onQuit={() => setView('dsa')}
+        />
+      )}
+      
     </div>
   );
 };
