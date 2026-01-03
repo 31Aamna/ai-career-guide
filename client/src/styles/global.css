@@ -2,135 +2,72 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 :root {
-  /* --- Colors --- */
+  /* Colors */
   --primary: #4318FF;
   --primary-hover: #2B00D6;
-  --primary-light: #E9E3FF;
-  
-  --bg-page: #F0F2F5;  /* Light Grey Background */
-  --bg-white: #FFFFFF; /* Pure White Containers */
-  
-  --text-main: #2B3674;  /* Dark Navy Text */
-  --text-light: #A3AED0; /* Grey Text */
-  
+  --bg-page: #F4F7FE;
+  --bg-white: #FFFFFF;
+  --text-main: #2B3674;
+  --text-light: #A3AED0;
   --border-color: #E0E5F2;
   --card-shadow: 0px 18px 40px rgba(112, 144, 176, 0.12);
-  --border-radius: 20px;
-
-  /* Status Colors */
   --green: #05CD99;
-  --green-bg: #E6FAF5;
+  --orange: #FFB547;
+  --orange-bg: #FFF7E6;
   --red: #E31A1A;
   --red-bg: #FFEEEE;
-  --orange: #FFB547;
-  --orange-bg: #FFF7E8;
+  --purple: #7551FF;
 }
 
-body {
+* {
+  box-sizing: border-box; 
+}
+
+/* 1. LOCK THE BROWSER WINDOW (No double scrollbars) */
+html, body {
   margin: 0;
   padding: 0;
+  width: 100%;
+  height: 100%;
   font-family: 'Inter', sans-serif;
   background-color: var(--bg-page);
   color: var(--text-main);
-  -webkit-font-smoothing: antialiased;
-  overflow: hidden; /* App handles scrolling */
-  transition: background-color 0.3s ease, color 0.3s ease;
+  overflow: hidden; /* CRITICAL */
 }
 
-/* --- MAIN APP LAYOUT (Sidebar Left | Content Right) --- */
+/* 2. FLEX CONTAINER FOR SIDEBAR + CONTENT */
 .app-layout {
-  display: flex;          /* Horizontal Layout */
-  flex-direction: row;    /* Force Row direction */
-  height: 100vh;
+  display: flex;
+  height: 100vh; /* Fill exact screen height */
   width: 100vw;
   overflow: hidden;
 }
 
-/* Sidebar Fixed Width */
+/* 3. SIDEBAR (Fixed Left) */
 .sidebar {
   width: 280px;
   flex-shrink: 0;
   height: 100%;
-  overflow-y: auto;
+  overflow-y: auto; /* Sidebar scrolls independently */
   z-index: 10;
+  /* Background is handled in Navbar.css */
 }
 
-/* Main Content Area */
+/* 4. MAIN CONTENT (Scrolls Right Side) */
 .main-content {
-  flex: 1;                /* Take remaining width */
-  height: 100%;
-  overflow-y: auto;       /* Independent scrolling */
+  flex: 1;
+  height: 100%;           
+  overflow-y: auto;       /* CRITICAL: Enables scrolling for your page */
   padding: 30px;
+  padding-bottom: 120px;  /* Extra padding at bottom so content isn't hidden */
   background-color: var(--bg-page);
-  position: relative;
-  transition: background-color 0.3s ease;
 }
 
-/* --- RESPONSIVE GRID SYSTEMS --- */
-
-/* 2 Columns: Side-by-Side (Flexible) */
-.grid-2 {
-  display: grid;
-  /* If space allows, split 2fr 1fr. If small, stack. */
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); 
-  gap: 30px;
-  align-items: start;
-  width: 100%;
-}
-
-/* 3 Columns: Side-by-Side */
-.grid-3 {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 25px;
-  width: 100%;
-}
-
-/* 4 Columns: Small Cards (Stats) */
-.grid-4 {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 20px;
-  width: 100%;
-}
-
-/* Flex Column Helper (Vertical Stack inside grids) */
-.flex-col {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  height: 100%;
-}
-
-/* Flex Row Helper (Horizontal Align) */
-.flex-row {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 15px;
-}
-
-.flex-between {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-}
-
-/* --- UTILITIES --- */
-h1, h2, h3, h4, p { margin: 0; }
-.mb-20 { margin-bottom: 20px; }
+/* Utilities */
+.flex-between { display: flex; justify-content: space-between; align-items: center; }
 .mb-30 { margin-bottom: 30px; }
 
-.card, .card-component {
-  background-color: var(--bg-white);
-  border-radius: var(--border-radius);
-  padding: 24px;
-  box-shadow: var(--card-shadow);
-  transition: background-color 0.3s ease;
-}
-
-/* --- DARK MODE OVERRIDES --- */
+/* Dark Mode Support */
 body.dark-mode {
   --bg-page: #0B1437;
   --bg-white: #111C44;
@@ -138,36 +75,4 @@ body.dark-mode {
   --text-light: #A3AED0;
   --border-color: #2B3674;
   --card-shadow: none;
-}
-
-/* Force dark mode elements */
-body.dark-mode h1, body.dark-mode h2, body.dark-mode h3, 
-body.dark-mode p, body.dark-mode span, body.dark-mode div, 
-body.dark-mode li {
-  color: var(--text-main);
-}
-
-body.dark-mode .text-light {
-  color: var(--text-light);
-}
-
-body.dark-mode input, body.dark-mode select, body.dark-mode textarea {
-  background-color: #1B254B !important;
-  color: white !important;
-  border-color: #2B3674 !important;
-}
-
-/* Mobile Adjustments */
-@media (max-width: 768px) {
-  .app-layout {
-    flex-direction: column; /* Stack Sidebar on top for mobile */
-  }
-  .sidebar {
-    width: 100%;
-    height: auto;
-    padding: 15px;
-  }
-  .grid-2, .grid-3, .grid-4 {
-    grid-template-columns: 1fr; /* Force stack on small screens */
-  }
 }
