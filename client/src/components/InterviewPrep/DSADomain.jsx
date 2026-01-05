@@ -1,15 +1,15 @@
 import React from 'react';
 import Card from '../UI/Card';
-import { technicalDomains } from '../../data/interviewData';
+import { dsaDomainData } from '../../data/interviewData';
 
 //Technical Domain page
 
-const TechnicalDomains = ({ onSelectDomain, onBack }) => {
+const DSADomain = ({ onSelectDomain, onBack }) => {
   return (
     <div>
       <div style={{textAlign:'center', marginBottom:'40px'}}>
-        <h2 style={{fontSize:'28px', color:'var(--text-main)'}}>Technical Domains</h2>
-        <p style={{color:'var(--text-light)'}}>Select a specific technology stack to practice</p>
+        <h2 style={{fontSize:'28px', color:'var(--text-main)'}}>DSA Domains</h2>
+        <p style={{color:'var(--text-light)'}}>Select a specific Zone to practice</p>
       </div>
 
       <div className="grid-4" style={{gridTemplateColumns:'repeat(auto-fit, minmax(280px, 1fr))'}}>
@@ -22,7 +22,7 @@ const TechnicalDomains = ({ onSelectDomain, onBack }) => {
         </Card> */}
         
 
-        {technicalDomains.map((domain) => (
+        {dsaDomainData.map((domain) => (
           <Card key={domain.id} onClick={() => onSelectDomain(domain.id)} style={{cursor:'pointer', minHeight:'140px', minWidth:'300px', display:'flex', flexDirection:'column', justifyContent:'space-between'}}>
             <div>
               {/* <div style={{width:'40px', height:'40px', background:'#EFF6FF', borderRadius:'8px', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'20px', marginBottom:'15px'}}>{domain.icon}</div> */}
@@ -30,7 +30,7 @@ const TechnicalDomains = ({ onSelectDomain, onBack }) => {
               <p style={{fontSize:'12px', color:'var(--text-light)'}}>{domain.desc}</p>
             </div>
             <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginTop:'20px', fontSize:'12px', fontWeight:'600'}}>
-              <span>Start Quiz</span>
+              <span>Start Practice</span>
               <span>➜</span>
             </div>
           </Card>
@@ -39,4 +39,4 @@ const TechnicalDomains = ({ onSelectDomain, onBack }) => {
     </div>
   );
 };
-export default TechnicalDomains;
+export default DSADomain;
