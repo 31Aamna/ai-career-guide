@@ -1,0 +1,284 @@
+/* client/src/components/SalaryInsights/SalaryInsights.css */
+
+/* --- Page Layout --- */
+.salary-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 40px;
+}
+
+.salary-header-row h1 {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--text-main);
+  margin: 0 0 10px 0;
+}
+
+.salary-header-row .text-light {
+  color: var(--text-light);
+  font-weight: 400;
+}
+
+.subtitle {
+  font-size: 16px;
+  color: var(--text-light);
+  margin: 0;
+}
+
+.resume-source-card {
+  background: var(--bg-white);
+  padding: 15px 25px;
+  border-radius: 40px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--border-color, transparent);
+}
+
+.source-icon {
+  font-size: 24px;
+  background: var(--bg-page);
+  width: 45px; height: 45px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 12px;
+  color: var(--text-main);
+}
+
+.arrow-btn {
+  background: none; border: none; color: var(--primary); font-size: 24px; cursor: pointer; margin-left: 10px;
+}
+
+/* --- Grid Layout --- */
+.salary-grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 40px;
+}
+
+@media (max-width: 1100px) {
+  .salary-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.left-column, .right-column {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+/* --- Generic Card --- */
+.salary-page-card {
+  background: var(--bg-white);
+  border-radius: 24px;
+  padding: 35px;
+  box-shadow: var(--card-shadow);
+}
+
+/* --- Market Range Card --- */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 30px;
+}
+
+.info-icon { color: var(--text-light); cursor: pointer; font-size: 20px; }
+
+.range-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  font-size: 15px;
+  color: var(--text-main);
+  font-weight: 600;
+}
+
+.range-labels .label {
+  display: block;
+  font-size: 13px;
+  color: var(--text-light);
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.range-labels .highlight {
+  color: var(--primary);
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.range-track-container {
+  position: relative;
+  height: 45px;
+  background: var(--bg-page);
+  border-radius: 16px;
+  margin: 20px 0 45px 0;
+  display: flex;
+  align-items: center;
+  padding: 0 6px;
+}
+
+.range-segment {
+  height: 100%;
+  border-radius: 4px;
+}
+.range-segment.low { width: 30%; background: #E9E3FF; opacity: 0.5; }
+.range-segment.mid { width: 40%; background: #E9E3FF; }
+.range-segment.high { width: 30%; background: var(--bg-page); }
+
+.user-marker {
+  position: absolute;
+  top: -22px;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.marker-tag {
+  background: var(--green);
+  color: white;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 5px 12px;
+  border-radius: 8px;
+  margin-bottom: 4px;
+  box-shadow: 0 4px 10px rgba(5, 205, 153, 0.3);
+}
+
+.marker-line {
+  width: 5px;
+  height: 55px;
+  background: var(--green);
+  border-radius: 3px;
+}
+
+.range-footer-text {
+  text-align: center;
+  font-size: 14px;
+  color: var(--text-light);
+  border-top: 1px solid var(--bg-page);
+  padding-top: 25px;
+  line-height: 1.6;
+}
+
+.data-source-tag {
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-light);
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+/* --- Salary Card --- */
+.salary-value-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.big-salary {
+  font-size: 58px;
+  font-weight: 800;
+  color: var(--text-main);
+  margin: 15px 0;
+  line-height: 1;
+}
+
+.big-salary span {
+  font-size: 20px;
+  color: var(--text-light);
+  font-weight: 500;
+}
+
+.top-badge {
+  background: var(--orange-bg);
+  border: 1px solid var(--orange);
+  padding: 12px 25px;
+  border-radius: 40px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.badge-text h4 { margin: 0; color: #B7791F; font-size: 15px; font-weight: 800; }
+.badge-text span { font-size: 10px; color: #B7791F; text-transform: uppercase; font-weight: 700; }
+
+.status-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--green);
+  font-weight: 700;
+  font-size: 15px;
+}
+
+/* --- UPDATED: COMPACT INSIGHT CARDS (Right Column) --- */
+
+.insight-card {
+  background: var(--bg-white);
+  border: 1px solid var(--bg-page);
+  border-radius: 16px; /* Slightly tighter radius */
+  padding: 18px; /* Reduced padding (was 25px) */
+  margin-bottom: 15px; /* Reduced margin (was 20px) */
+  transition: transform 0.2s;
+  box-shadow: var(--card-shadow);
+}
+
+.insight-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+}
+
+.ic-header { 
+  display: flex; 
+  gap: 12px; /* Reduced gap */
+  margin-bottom: 8px; /* Reduced margin */
+}
+
+.ic-icon {
+  width: 36px; height: 36px; /* Smaller Icons (was 48px) */
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; /* Smaller Emoji font */
+  flex-shrink: 0;
+}
+
+/* Icon Backgrounds */
+.bg-red { background: #FFEEEE; color: #E31A1A; }
+.bg-purple { background: #F3E8FF; color: #7551FF; }
+.bg-green { background: #E6FAF5; color: #05CD99; }
+.bg-orange { background: #FFF7E8; color: #FFB547; }
+
+.ic-content h4 { 
+  font-size: 14px; /* Smaller Title (was 16px) */
+  margin: 0 0 2px 0; 
+  color: var(--text-main); 
+}
+.ic-content p { 
+  font-size: 11px; /* Smaller subtitle (was 12px) */
+  margin: 0; 
+  color: var(--text-light); 
+}
+
+.ic-desc {
+  font-size: 12px; /* Smaller body text */
+  color: var(--text-light);
+  line-height: 1.5;
+  margin-top: 8px;
+  padding-left: 48px; /* Adjusted alignment to match new icon size */
+}
+
+.ic-desc strong { color: var(--text-main); }
+
+.ic-badge {
+  background: var(--purple-light); color: var(--primary); display: inline-block;
+  font-size: 9px; font-weight: 700; padding: 3px 8px; border-radius: 6px;
+  margin-left: 48px; margin-bottom: 6px;
+}
+
+.impact-tag { font-size: 9px; background: var(--orange-bg); color: #B7791F; padding: 2px 6px; border-radius: 4px; }
