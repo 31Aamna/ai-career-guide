@@ -1,154 +1,158 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../context/UserContext';
-import Card from '../components/UI/Card';
 import Button from '../components/UI/Button';
+import './LoginPage.css';
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const { login, register } = useContext(UserContext);
-  
-  const [isLoginMode, setIsLoginMode] = useState(true);
+
+  // State
+  const [isRegistering, setIsRegistering] = useState(false);
   const [formData, setFormData] = useState({ name: '', email: '', password: '', confirmPassword: '' });
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    setError(''); // Clear error on typing
+    setError('');
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setLoading(true);
     setError('');
 
-    if (isLoginMode) {
-      // LOGIN LOGIC
-      const result = login(formData.email, formData.password);
-      if (result.success) {
-        navigate('/');
+    // Simulate Network Delay
+    setTimeout(() => {
+      if (isRegistering) {
+        // --- REGISTER LOGIC ---
+        if (formData.password !== formData.confirmPassword) {
+          setError("Passwords do not match");
+          setLoading(false);
+          return;
+        }
+        if (formData.password.length < 6) {
+          setError("Password must be at least 6 characters");
+          setLoading(false);
+          return;
+        }
+        register(formData.name, formData.email, formData.password);
+        navigate('/'); // Go to Welcome Dashboard
       } else {
-        setError(result.message);
+        // --- LOGIN LOGIC ---
+        const result = login(formData.email, formData.password);
+        if (result.success) {
+          navigate('/');
+        } else {
+          setError(result.message);
+        }
       }
-    } else {
-      // SIGNUP LOGIC
-      if (!formData.name || !formData.email || !formData.password) {
-        setError("All fields are required.");
-        return;
-      }
-      if (formData.password !== formData.confirmPassword) {
-        setError("Passwords do not match.");
-        return;
-      }
-      if (formData.password.length < 6) {
-        setError("Password must be at least 6 characters.");
-        return;
-      }
-      
-      register(formData.name, formData.email, formData.password);
-      navigate('/');
-    }
+      setLoading(false);
+    }, 800);
   };
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', background: 'var(--bg-page)' }}>
-      <Card style={{ width: '100%', maxWidth: '450px', padding: '40px' }}>
-        
-        {/* Header */}
-        <div style={{ textAlign: 'center', marginBottom: '30px' }}>
-          <div style={{ fontSize: '40px', marginBottom: '10px' }}>🧠</div>
-          <h2 style={{ color: 'var(--text-main)' }}>
-            {isLoginMode ? 'Welcome Back!' : 'Create Account'}
-          </h2>
-          <p style={{ color: 'var(--text-light)', fontSize: '14px' }}>
-            {isLoginMode ? 'Enter your details to access your career hub.' : 'Start your AI-powered career journey.'}
+    <div className="login-page">
+      
+      {/* LEFT SIDE: FORM */}
+      <div className="login-left">
+        <div className="brand-header">
+          <span style={{fontSize: '28px'}}>🧠</span>
+          <h3 style={{margin:0, color:'var(--text-main)'}}>CareerAI</h3>
+        </div>
+
+        <div className="form-wrapper">
+          <h1 className="welcome-title">
+            {isRegistering ? 'Create an account' : 'Welcome back'}
+          </h1>
+          <p className="welcome-sub">
+            {isRegistering ? 'Start your journey today.' : 'Please enter your details.'}
+          </p>
+
+          <form onSubmit={handleSubmit}>
+            
+            {isRegistering && (
+              <div className="form-group">
+                <label>Full Name</label>
+                <input 
+                  type="text" name="name" placeholder="Alex Johnson" 
+                  value={formData.name} onChange={handleChange} required 
+                />
+              </div>
+            )}
+
+            <div className="form-group">
+              <label>Email address</label>
+              <input 
+                type="email" name="email" placeholder="Enter your email" 
+                value={formData.email} onChange={handleChange} required 
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Password</label>
+              <input 
+                type="password" name="password" placeholder="••••••••" 
+                value={formData.password} onChange={handleChange} required 
+              />
+            </div>
+
+            {isRegistering && (
+              <div className="form-group">
+                <label>Confirm Password</label>
+                <input 
+                  type="password" name="confirmPassword" placeholder="••••••••" 
+                  value={formData.confirmPassword} onChange={handleChange} required 
+                />
+              </div>
+            )}
+
+            {!isRegistering && (
+              <div className="form-actions">
+                <label className="checkbox-container">
+                  <input type="checkbox" />
+                  <span>Remember for 30 days</span>
+                </label>
+                <span className="forgot-pass">Forgot password?</span>
+              </div>
+            )}
+
+            {error && <div className="error-msg">{error}</div>}
+
+            <Button fullWidth style={{height: '48px', fontSize: '16px', marginTop: '20px', background: '#4318FF'}}>
+              {loading ? 'Processing...' : (isRegistering ? 'Sign Up' : 'Sign In')}
+            </Button>
+
+            <button type="button" className="google-btn" onClick={() => alert("Google Login (Mock)")}>
+              <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="G" width="20" />
+              {isRegistering ? 'Sign up with Google' : 'Sign in with Google'}
+            </button>
+
+          </form>
+
+          <p className="signup-link">
+            {isRegistering ? "Already have an account? " : "Don't have an account? "}
+            <span onClick={() => { setIsRegistering(!isRegistering); setError(''); }}>
+              {isRegistering ? 'Sign in' : 'Sign up'}
+            </span>
           </p>
         </div>
+      </div>
 
-        {/* Form */}
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          
-          {!isLoginMode && (
-            <div>
-              <label style={{ fontSize: '12px', fontWeight: '600', display: 'block', marginBottom: '5px' }}>Full Name</label>
-              <input 
-                name="name" 
-                type="text" 
-                placeholder="ex. Alex Johnson"
-                value={formData.name}
-                onChange={handleChange}
-                style={inputStyle}
-              />
-            </div>
-          )}
+      {/* RIGHT SIDE: ILLUSTRATION */}
+      <div className="login-right">
+        {/* Abstract 3D Illustration */}
+        <img 
+          src="https://cdni.iconscout.com/illustration/premium/thumb/login-3305943-2757111.png" 
+          alt="Login Illustration" 
+          className="bg-image"
+        />
+      </div>
 
-          <div>
-            <label style={{ fontSize: '12px', fontWeight: '600', display: 'block', marginBottom: '5px' }}>Email Address</label>
-            <input 
-              name="email" 
-              type="email" 
-              placeholder="ex. alex@example.com"
-              value={formData.email}
-              onChange={handleChange}
-              style={inputStyle}
-            />
-          </div>
-
-          <div>
-            <label style={{ fontSize: '12px', fontWeight: '600', display: 'block', marginBottom: '5px' }}>Password</label>
-            <input 
-              name="password" 
-              type="password" 
-              placeholder="••••••••"
-              value={formData.password}
-              onChange={handleChange}
-              style={inputStyle}
-            />
-          </div>
-
-          {!isLoginMode && (
-            <div>
-              <label style={{ fontSize: '12px', fontWeight: '600', display: 'block', marginBottom: '5px' }}>Confirm Password</label>
-              <input 
-                name="confirmPassword" 
-                type="password" 
-                placeholder="••••••••"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                style={inputStyle}
-              />
-            </div>
-          )}
-
-          {error && <p style={{ color: 'var(--red)', fontSize: '12px', textAlign: 'center' }}>{error}</p>}
-
-          <Button fullWidth>{isLoginMode ? 'Sign In' : 'Create Account'}</Button>
-        </form>
-
-        {/* Footer Toggle */}
-        <div style={{ marginTop: '20px', textAlign: 'center', fontSize: '13px', color: 'var(--text-light)' }}>
-          {isLoginMode ? "Don't have an account? " : "Already have an account? "}
-          <span 
-            onClick={() => setIsLoginMode(!isLoginMode)} 
-            style={{ color: 'var(--primary)', fontWeight: 'bold', cursor: 'pointer' }}
-          >
-            {isLoginMode ? 'Sign Up' : 'Log In'}
-          </span>
-        </div>
-
-      </Card>
     </div>
   );
-};
-
-const inputStyle = {
-  width: '100%',
-  padding: '12px 15px',
-  borderRadius: '12px',
-  border: '1px solid #E0E5F2',
-  fontSize: '14px',
-  outline: 'none',
-  background: '#F9FAFB',
-  boxSizing: 'border-box'
 };
 
 export default LoginPage;

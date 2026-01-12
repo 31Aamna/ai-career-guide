@@ -1,72 +1,72 @@
-import React, { useState } from 'react';
-import Card from '../components/UI/Card';
-import Button from '../components/UI/Button';
-import { salaryBaseData } from '../data/interviewData';
+import React, { useState, useContext } from 'react';
+import { UserContext } from '../context/UserContext'; // 1. Import Context
+import MarketRangeCard from '../components/SalaryInsights/MarketRangeCard';
+import SalaryCard from '../components/SalaryInsights/SalaryCard';
+import ActionableInsights from '../components/SalaryInsights/ActionableInsights';
+import '../components/SalaryInsights/SalaryInsights.css';
 
 const SalaryInsightsPage = () => {
-  const [role, setRole] = useState("Frontend Developer");
-  const [exp, setExp] = useState(2);
-  const [result, setResult] = useState(null);
+  // 2. Get User Data from Context
+  const { user } = useContext(UserContext);
 
-  const calculate = () => {
-    const data = salaryBaseData[role];
-    const estimated = data.base + (exp * data.multiplier);
-    setResult(estimated);
-  };
+  // Mock Data State
+  const [data] = useState({
+    role: "Frontend Developer",
+    min: 60000,
+    max: 150000,
+    avg: 95000,
+    expected: 120000,
+  });
+
+  // Helper to get first name (e.g., "Alex" from "Alex Johnson")
+  const firstName = user?.name ? user.name.split(' ')[0] : 'User';
 
   return (
     <div>
-      <div className="mb-30">
-        <h1>Salary Insights</h1>
-        <p>Based on market data</p>
-      </div>
-      <div className="grid-2">
-        <div className="flex-col gap-20">
-          <Card>
-            <h3 className="mb-20">Calculate Market Value</h3>
-            <div className="flex-col gap-20">
-              <div>
-                <label style={{fontSize:'12px', fontWeight:'bold', display:'block', marginBottom:'5px'}}>Job Role</label>
-                <select value={role} onChange={(e) => setRole(e.target.value)} style={{width:'100%', padding:'10px', borderRadius:'10px', border:'1px solid #E0E5F2'}}>
-                  {Object.keys(salaryBaseData).map(r => <option key={r} value={r}>{r}</option>)}
-                </select>
-              </div>
-              <div>
-                <label style={{fontSize:'12px', fontWeight:'bold', display:'block', marginBottom:'5px'}}>Experience: {exp} Years</label>
-                <input type="range" min="0" max="10" value={exp} onChange={(e)=>setExp(Number(e.target.value))} style={{width:'100%'}} />
-              </div>
-              <Button fullWidth onClick={calculate}>Estimate Salary</Button>
-            </div>
-          </Card>
+      {/* Header */}
+      <div className=" flex-between mb-30">
+        {/* <div>
+          <h1>Hey {firstName}, <span className="text-light">here is your salary overview.</span></h1>
+          <p className="subtitle">Based on your resume analysis as <strong>{data.role}</strong></p>
+        </div> */}
 
-          {result && (
-            <Card style={{background:'linear-gradient(135deg, #fff 0%, #F6F8FD 100%)', border:'1px solid var(--primary)'}}>
-              <p style={{fontSize:'12px', fontWeight:'600', textTransform:'uppercase'}}>Estimated Annual Salary</p>
-              <h1 style={{fontSize:'42px', margin:'10px 0'}}>${result.toLocaleString()}<span style={{fontSize:'16px', color:'var(--text-light)'}}>/yr</span></h1>
-              <div className="flex-between" style={{fontSize:'13px', color:'var(--text-light)'}}>
-                 <span>Monthly: ${Math.floor(result/12).toLocaleString()}</span>
-                 <span style={{color:'var(--green)', fontWeight:'bold'}}>High Confidence</span>
-              </div>
-            </Card>
-          )}
+        <div className="roadmap-header " style={{marginBottom: 0}}>
+          <h1>Hey {firstName}, <span style={{color:'var(--primary)'}}>here is your salary overview.</span></h1>
+          <p>Based on your resume analysis as <strong>{data.role}</strong></p>
         </div>
         
-        {/* Tips Section from Screenshot */}
-        <div className="flex-col gap-20">
-          <Card>
-            <h3 className="mb-20">How to achieve this?</h3>
-            <div className="flex-row gap-15 mb-20">
-              <div style={{width:'40px', height:'40px', background:'#EFF6FF', borderRadius:'10px', display:'flex', alignItems:'center', justifyContent:'center'}}>🚀</div>
-              <div><h5 style={{fontSize:'14px'}}>Skill Upgrades</h5><p style={{fontSize:'12px', color:'var(--text-light)'}}>Learn TypeScript & Next.js.</p></div>
-            </div>
-            <div className="flex-row gap-15">
-              <div style={{width:'40px', height:'40px', background:'#F3E8FF', borderRadius:'10px', display:'flex', alignItems:'center', justifyContent:'center'}}>💼</div>
-              <div><h5 style={{fontSize:'14px'}}>Negotiation</h5><p style={{fontSize:'12px', color:'var(--text-light)'}}>Don't share current salary.</p></div>
-            </div>
-          </Card>
+        <div className="resume-source-card">
+          <div className="source-icon">📄</div>
+          <div>
+            <h4 style={{margin:0, fontSize:'14px', color:'var(--text-main)'}}>Resume-based Analysis</h4>
+            <span style={{fontSize:'12px', color:'var(--text-light)'}}>Last analyzed: Today</span>
+          </div>
+          <button className="arrow-btn">›</button>
         </div>
+      </div>
+
+      {/* Main Grid */}
+      <div className="salary-grid">
+        
+        {/* Left Column */}
+        <div className="left-column">
+          <MarketRangeCard 
+            min={data.min} 
+            max={data.max} 
+            avg={data.avg} 
+            current={data.expected} 
+          />
+          <SalaryCard salary={data.expected} />
+        </div>
+
+        {/* Right Column */}
+        <div className="right-column">
+          <ActionableInsights />
+        </div>
+
       </div>
     </div>
   );
 };
+
 export default SalaryInsightsPage;

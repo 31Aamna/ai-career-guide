@@ -17,186 +17,92 @@
   justify-content: center;
   position: relative;
   background: white;
-  z-index: 10; /* Ensure form stays on top */
+  z-index: 10;
 }
 
 .brand-header {
   position: absolute;
-  top: 40px;
-  left: 40px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
+  top: 40px; left: 40px;
+  display: flex; alignItems: center; gap: 10px;
   font-weight: 700;
 }
 
 .form-wrapper {
-  max-width: 400px;
+  max-width: 380px;
   width: 100%;
   margin: 0 auto;
 }
 
 .welcome-title {
-  font-size: 32px;
-  color: var(--text-main);
-  margin-bottom: 10px;
-}
-
-.welcome-sub {
-  color: var(--text-light);
-  margin-bottom: 40px;
-  font-size: 14px;
-}
-
-.form-group {
-  margin-bottom: 20px;
-}
-
-.form-group label {
-  display: block;
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 30px;
   color: var(--text-main);
   margin-bottom: 8px;
 }
 
-.form-group input {
-  width: 100%;
-  padding: 12px 15px;
-  border: 1px solid #E0E5F2;
-  border-radius: 12px;
+.welcome-sub {
+  color: var(--text-light);
+  margin-bottom: 30px;
   font-size: 14px;
-  outline: none;
-  box-sizing: border-box;
-  transition: 0.2s;
-  color: var(--text-main);
-  background: white;
+}
+
+.form-group { margin-bottom: 16px; }
+
+.form-group label {
+  display: block; font-size: 13px; font-weight: 600;
+  color: var(--text-main); margin-bottom: 6px;
+}
+
+.form-group input {
+  width: 100%; padding: 12px 15px;
+  border: 1px solid #E0E5F2; borderRadius: 12px;
+  font-size: 14px; color: var(--text-main); background: white;
+  outline: none; box-sizing: border-box; transition: 0.2s;
 }
 
 .form-group input:focus {
-  border-color: var(--primary);
+  border-color: #4318FF;
   box-shadow: 0 0 0 4px #E9E3FF;
 }
 
 .form-actions {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 13px;
-  margin-bottom: 10px;
+  display: flex; justify-content: space-between; alignItems: center;
+  font-size: 12px; margin-bottom: 10px;
 }
 
 .checkbox-container {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--text-main);
-  cursor: pointer;
+  display: flex; alignItems: center; gap: 6px; color: var(--text-main); cursor: pointer;
 }
 
-.forgot-pass {
-  color: var(--primary);
-  text-decoration: none;
-  font-weight: 600;
-}
+.forgot-pass { color: #4318FF; text-decoration: none; font-weight: 600; cursor: pointer;}
 
 .google-btn {
-  width: 100%;
-  margin-top: 15px;
-  padding: 12px;
-  background: white;
-  border: 1px solid #E0E5F2;
-  border-radius: 12px;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  cursor: pointer;
-  color: var(--text-main);
-  transition: 0.2s;
+  width: 100%; margin-top: 15px; padding: 12px;
+  background: white; border: 1px solid #E0E5F2; borderRadius: 12px;
+  font-weight: 600; display: flex; alignItems: center; justifyContent: center;
+  gap: 10px; cursor: pointer; color: var(--text-main); transition: 0.2s;
 }
-
-.google-btn:hover {
-  background: #F9FAFB;
-}
+.google-btn:hover { background: #F9FAFB; }
 
 .signup-link {
-  text-align: center;
-  margin-top: 30px;
-  font-size: 14px;
-  color: var(--text-light);
+  text-align: center; margin-top: 25px; font-size: 13px; color: var(--text-light);
 }
-
-.signup-link span {
-  color: var(--primary);
-  font-weight: 700;
-  cursor: pointer;
-}
+.signup-link span { color: #4318FF; font-weight: 700; cursor: pointer; }
 
 .error-msg {
-  color: #E31A1A;
-  background: #FFEEEE;
-  padding: 10px;
-  border-radius: 8px;
-  font-size: 12px;
-  margin-bottom: 15px;
-  text-align: center;
+  color: #E31A1A; background: #FFEEEE; padding: 10px;
+  borderRadius: 8px; font-size: 12px; margin-bottom: 15px; text-align: center;
 }
 
-/* --- Right Side (UPDATED) --- */
+/* --- Right Side --- */
 .login-right {
   flex: 1;
-  /* Blue to Indigo Gradient */
-  background: linear-gradient(135deg, #6042e7 0%, #a492e9 100%);
-  position: relative;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  padding: 60px;
-  overflow: hidden;
+  background: linear-gradient(135deg, #a492e9 0%, #868CFF 100%); /* Matches theme */
+  display: flex; alignItems: center; justifyContent: center;
+  padding: 40px; position: relative;
 }
 
-/* This puts a subtle texture/image over the gradient */
 .bg-image {
-  position: absolute;
-  top: 0; left: 0; width: 100%; height: 100%;
-  object-fit: cover;
-  /* Blend mode allows the gradient color to shine through */
-  opacity: 0.2; 
-  mix-blend-mode: overlay;
-}
-
-.image-overlay {
-  position: relative;
-  z-index: 2;
-  text-align: center;
-  color: white;
-  max-width: 450px;
-  backdrop-filter: blur(5px); /* Adds a nice glass effect */
-  background: rgba(255, 255, 255, 0.1);
-  padding: 30px;
-  border-radius: 24px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.image-overlay h2 {
-  font-size: 32px;
-  margin-bottom: 15px;
-  line-height: 1.2;
-  font-weight: 800;
-}
-
-.image-overlay p {
-  font-size: 16px;
-  opacity: 0.9;
-  color: rgba(255, 255, 255, 0.9);
-}
-
-/* Dark Mode Support */
-body.dark-mode .login-left,
-body.dark-mode .form-group input,
-body.dark-mode .google-btn {
-  background: var(--bg-white);
-  border-color: #2B3674;
+  max-width: 80%;
+  height: auto;
+  filter: drop-shadow(0 20px 40px rgba(0,0,0,0.15));
 }
