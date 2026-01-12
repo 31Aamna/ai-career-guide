@@ -1,0 +1,108 @@
+/* client/src/Page/LoginPage.css */
+
+.login-page {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  background: white;
+  overflow: hidden;
+}
+
+/* --- Left Side --- */
+.login-left {
+  flex: 1;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  background: white;
+  z-index: 10;
+}
+
+.brand-header {
+  position: absolute;
+  top: 40px; left: 40px;
+  display: flex; alignItems: center; gap: 10px;
+  font-weight: 700;
+}
+
+.form-wrapper {
+  max-width: 380px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.welcome-title {
+  font-size: 30px;
+  color: var(--text-main);
+  margin-bottom: 8px;
+}
+
+.welcome-sub {
+  color: var(--text-light);
+  margin-bottom: 30px;
+  font-size: 14px;
+}
+
+.form-group { margin-bottom: 16px; }
+
+.form-group label {
+  display: block; font-size: 13px; font-weight: 600;
+  color: var(--text-main); margin-bottom: 6px;
+}
+
+.form-group input {
+  width: 100%; padding: 12px 15px;
+  border: 1px solid #E0E5F2; borderRadius: 12px;
+  font-size: 14px; color: var(--text-main); background: white;
+  outline: none; box-sizing: border-box; transition: 0.2s;
+}
+
+.form-group input:focus {
+  border-color: #4318FF;
+  box-shadow: 0 0 0 4px #E9E3FF;
+}
+
+.form-actions {
+  display: flex; justify-content: space-between; alignItems: center;
+  font-size: 12px; margin-bottom: 10px;
+}
+
+.checkbox-container {
+  display: flex; alignItems: center; gap: 6px; color: var(--text-main); cursor: pointer;
+}
+
+.forgot-pass { color: #4318FF; text-decoration: none; font-weight: 600; cursor: pointer;}
+
+.google-btn {
+  width: 100%; margin-top: 15px; padding: 12px;
+  background: white; border: 1px solid #E0E5F2; borderRadius: 12px;
+  font-weight: 600; display: flex; alignItems: center; justifyContent: center;
+  gap: 10px; cursor: pointer; color: var(--text-main); transition: 0.2s;
+}
+.google-btn:hover { background: #F9FAFB; }
+
+.signup-link {
+  text-align: center; margin-top: 25px; font-size: 13px; color: var(--text-light);
+}
+.signup-link span { color: #4318FF; font-weight: 700; cursor: pointer; }
+
+.error-msg {
+  color: #E31A1A; background: #FFEEEE; padding: 10px;
+  borderRadius: 8px; font-size: 12px; margin-bottom: 15px; text-align: center;
+}
+
+/* --- Right Side --- */
+.login-right {
+  flex: 1;
+  background: linear-gradient(135deg, #a492e9 0%, #868CFF 100%); /* Matches theme */
+  display: flex; alignItems: center; justifyContent: center;
+  padding: 40px; position: relative;
+}
+
+.bg-image {
+  max-width: 80%;
+  height: auto;
+  filter: drop-shadow(0 20px 40px rgba(0,0,0,0.15));
+}

@@ -1,0 +1,304 @@
+/* client/src/components/CareerRoadmap/CareerRoadmap.css */
+
+.roadmap-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* --- Header --- */
+.roadmap-header {
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.roadmap-header h1 {
+  font-size: 32px;
+  color: var(--text-main);
+  margin-bottom: 5px;
+}
+
+.roadmap-header p {
+  color: var(--text-light);
+  font-size: 16px;
+}
+
+.role-highlight {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.no-context-badge {
+  background: var(--orange-bg);
+  color: #B7791F;
+  padding: 8px 15px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  border: 1px solid var(--orange);
+}
+
+/* --- Input Card --- */
+.roadmap-input-card {
+  background: var(--bg-white);
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: var(--card-shadow);
+  margin-bottom: 40px;
+  border: 1px solid var(--border-color, transparent);
+}
+
+.input-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+.input-field-group .input-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 10px;
+}
+
+.input-wrapper {
+  background: var(--bg-page);
+  border-radius: 12px;
+  padding: 12px 15px;
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--border-color, transparent);
+}
+
+.input-wrapper input {
+  background: transparent;
+  border: none;
+  width: 100%;
+  font-size: 14px;
+  color: var(--text-main);
+  font-weight: 500;
+  outline: none;
+}
+
+.btn-build {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: 0.2s;
+}
+
+.btn-build:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(67, 24, 255, 0.2);
+}
+
+.tip-text {
+  font-size: 12px;
+  color: var(--text-light);
+  font-style: italic;
+}
+
+/* --- MAIN LAYOUT GRID (Fixes the stacking issue) --- */
+.roadmap-content-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr; /* Left is 2x wider than Right */
+  gap: 30px;
+  align-items: start;
+}
+
+/* Responsive: Stack on mobile */
+@media (max-width: 1000px) {
+  .roadmap-content-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+/* --- Timeline Card --- */
+.learning-path-card {
+  background: var(--bg-white);
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--border-color, transparent);
+}
+
+.timeline {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding-left: 10px;
+}
+
+.timeline-item {
+  display: flex;
+  gap: 25px;
+  padding-bottom: 50px;
+  position: relative;
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: 20px;
+  top: 40px;
+  height: 100%;
+  width: 2px;
+  background: var(--border-color);
+}
+
+.timeline-item:last-child::before {
+  display: none;
+}
+
+.timeline-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  font-size: 18px;
+  flex-shrink: 0;
+  background: var(--bg-white);
+  border: 2px solid var(--border-color);
+  color: var(--text-light);
+}
+
+.timeline-item.completed .timeline-icon {
+  border-color: var(--green);
+  color: var(--green);
+}
+.timeline-item.completed::before {
+  background: var(--green);
+}
+
+.timeline-item.active .timeline-icon {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+.timeline-item.active .timeline-icon::after {
+  content: '';
+  width: 10px; height: 10px;
+  background: var(--primary);
+  border-radius: 50%;
+}
+
+.step-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  width: 100%;
+}
+
+.step-header h3 {
+  font-size: 18px;
+  margin: 0;
+  color: var(--text-main);
+  font-weight: 700;
+}
+
+.phase-tag {
+  font-size: 12px;
+  color: var(--text-light);
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.phase-tag.active {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.timeline-item p {
+  font-size: 14px;
+  color: var(--text-light);
+  line-height: 1.6;
+  margin: 0;
+  max-width: 95%;
+}
+
+/* --- Right Side Cards --- */
+.side-card {
+  background: var(--bg-white);
+  border-radius: 20px;
+  padding: 35px;
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--border-color, transparent);
+}
+
+.side-card h3 {
+  font-size: 16px;
+  color: var(--text-main);
+  margin: 0 0 5px 0;
+  font-weight: 700;
+}
+
+.card-subtitle {
+  font-size: 12px;
+  color: var(--text-light);
+  display: block;
+  margin-bottom: 20px;
+}
+
+.skill-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 0;
+  border-bottom: 1px solid var(--bg-page);
+}
+.skill-row:last-child { border-bottom: none; padding-bottom: 0; }
+
+.skill-row h4 { font-size: 14px; margin: 0 0 4px 0; color: var(--text-main); }
+.skill-row span { font-size: 11px; color: var(--text-light); }
+
+.priority-badge {
+  font-size: 9px;
+  font-weight: 800;
+  padding: 4px 8px;
+  border-radius: 6px;
+  text-transform: uppercase;
+  min-width: 80px;
+  text-align: center;
+}
+.priority-badge.high { background: var(--orange-bg); color: #B7791F; }
+.priority-badge.critical { background: var(--red-bg); color: var(--red); }
+
+.suggestion-card { border-left: 6px solid var(--primary); }
+.suggestion-content { font-size: 13px; line-height: 1.6; color: var(--text-main); font-style: italic; margin-top: 10px; }
+
+/* --- Recommended Learning (Bottom Card) --- */
+.rec-learning-card {
+  background: var(--bg-white);
+  border-radius: 20px;
+  padding: 16px 20px 8px; /* top | left-right | bottom */
+  margin-top: 10px;
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--border-color, transparent);
+  width: 55%;
+}
+
+.learning-item { display: flex; gap: 15px; align-items: flex-start; margin-top: 20px; }
+.learning-icon { font-size: 24px; background: var(--bg-page); width: 45px; height: 45px; display: flex; alignItems: center; justifyContent: center; border-radius: 12px; flex-shrink: 0; }
+.learning-text h4 { font-size: 14px; margin: 0 0 4px 0; color: var(--text-main); font-weight: 700; }
+.learning-text p { font-size: 12px; margin: 0; color: var(--text-light); }
