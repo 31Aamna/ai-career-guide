@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 .sidebar { width: 260px; background: linear-gradient(180deg, #868CFF 0%, #4318FF 100%); padding: 30px; display: flex; flex-direction: column; color: white; }
 .brand { display: flex; align-items: center; gap: 10px; margin-bottom: 30px; }
 .logo-icon { width: 30px; height: 30px; background: rgba(255,255,255,0.2); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: bold; }
@@ -35,3 +36,99 @@
     display: flex;
   }
 }
+=======
+/* --- THEME VARIABLES --- */
+:root {
+  /* LIGHT MODE: The exact vibrant gradient from your image */
+  --dashboard-gradient: linear-gradient(180deg, #7F6AFF 0%, #5E3BFF 100%);
+  --sidebar-bg: var(--dashboard-gradient);
+  --sidebar-text: #FFFFFF;
+  --sidebar-muted: rgba(255, 255, 255, 0.7);
+  --profile-card-bg: rgba(255, 255, 255, 0.15); /* Glass effect */
+  --card-border: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme='dark'] {
+  /* DARK MODE: Slightly darker purple gradient */
+  --dashboard-gradient: linear-gradient(180deg, #1A123D 0%, #0B0921 100%);
+  --sidebar-bg: linear-gradient(180deg, #160D33 0%, #09061A 100%);
+  --sidebar-text: #FFFFFF;
+  --sidebar-muted: #A3AED0;
+  --profile-card-bg: rgba(0, 0, 0, 0.2);
+  --card-border: rgba(255, 255, 255, 0.05);
+}
+
+/* --- SIDEBAR STYLES --- */
+.sidebar {
+  width: 260px;
+  background: var(--sidebar-bg);
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  color: var(--sidebar-text);
+  min-height: 100vh;
+  transition: all 0.4s ease-in-out;
+}
+
+.brand { 
+  display: flex; 
+  align-items: center; 
+  gap: 12px; 
+  margin-bottom: 40px; 
+  font-size: 24px;
+  font-weight: 800;
+}
+
+.user-profile { 
+  background: var(--profile-card-bg); 
+  padding: 18px; 
+  border-radius: 20px; 
+  display: flex; 
+  align-items: center; 
+  gap: 12px; 
+  margin-bottom: 40px; 
+  border: 1px solid var(--card-border);
+  backdrop-filter: blur(10px);
+}
+
+.nav-item { 
+  display: flex; 
+  align-items: center; 
+  gap: 15px; 
+  padding: 12px 16px; 
+  color: var(--sidebar-text);
+  opacity: 0.8;
+  text-decoration: none; 
+  border-radius: 12px; 
+  font-weight: 600; 
+  transition: 0.2s; 
+}
+
+.nav-item:hover, .nav-item.active { 
+  background: rgba(255, 255, 255, 0.1); 
+  opacity: 1;
+}
+
+/* Premium Card to match image */
+.premium-card { 
+  background: rgba(255, 255, 255, 0.1); 
+  padding: 24px; 
+  border-radius: 24px; 
+  text-align: center; 
+  margin-top: auto;
+  border: 1px solid var(--card-border);
+}
+
+.upgrade-btn { 
+  width: 100%; 
+  padding: 12px; 
+  border: none; 
+  border-radius: 25px; 
+  background: white; 
+  color: #5E3BFF; 
+  font-weight: 800; 
+  cursor: pointer; 
+  margin-top: 15px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+>>>>>>> Stashed changes

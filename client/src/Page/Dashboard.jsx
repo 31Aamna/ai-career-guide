@@ -1,86 +1,65 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import Card from '../components/UI/Card';
 import Button from '../components/UI/Button';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../context/UserContext';
-import { Settings, Bell } from 'lucide-react';
+import { 
+  Settings, Bell, Rocket, GraduationCap, 
+  ArrowRight, TrendingUp, DollarSign, Target, Award 
+} from 'lucide-react';
 
-// --- SUB-COMPONENTS ---
+// --- THEME-AWARE SUB-COMPONENTS ---
 
-const StatCard = ({ icon, color, label, value, sub, subColor, cornerIcon }) => (
-  <Card style={{ display: 'flex', alignItems: 'center', position: 'relative', overflow: 'hidden', minWidth: 0, padding: '25px' }}>
+const StatCard = ({ icon, color, label, value, sub, subColor, theme }) => (
+  <Card style={{ 
+    display: 'flex', 
+    alignItems: 'center', 
+    padding: '25px',
+    background: theme.card,
+    border: `1px solid ${theme.border}`,
+    backdropFilter: theme.isDarkMode ? 'blur(10px)' : 'none',
+    boxShadow: theme.isDarkMode ? 'none' : '0px 18px 40px rgba(112, 144, 176, 0.12)'
+  }}>
     <div style={{
       width: '56px', height: '56px', borderRadius: '50%', 
-      background: '#F4F7FE', display: 'flex', alignItems: 'center', justifyContent: 'center', 
+      background: theme.iconBg, display: 'flex', alignItems: 'center', justifyContent: 'center', 
       fontSize: '24px', marginRight: '15px', flexShrink: 0
     }}>
       <span style={{ color: color }}>{icon}</span>
     </div>
     <div style={{ minWidth: 0 }}>
-      <p style={{ fontSize: '14px', color: 'var(--text-light)', marginBottom: '4px', whiteSpace: 'nowrap' }}>{label}</p>
-      <h3 style={{ fontSize: '24px', color: 'var(--text-main)', margin: 0 }}>{value}</h3>
-      {sub && <p style={{ fontSize: '12px', color: subColor, marginTop: '4px', fontWeight: 700 }}>{sub}</p>}
+      <p style={{ fontSize: '13px', color: theme.textLight, marginBottom: '4px' }}>{label}</p>
+      <h3 style={{ fontSize: '24px', color: theme.textMain, margin: 0, fontWeight: '800' }}>{value}</h3>
+      {sub && <p style={{ fontSize: '11px', color: subColor, marginTop: '4px', fontWeight: 700 }}>{sub}</p>}
     </div>
-    {cornerIcon && <div style={{position:'absolute', top:'15px', right:'15px', fontSize:'18px', opacity:0.3}}>{cornerIcon}</div>}
   </Card>
 );
 
-// Fixed ActionRow: Handles 'sub' or 'desc', and fixed border syntax
-const ActionRow = ({ title, sub, desc, icon, bg, color, onClick }) => (
+const ActionRow = ({ title, sub, icon, bg, color, onClick, theme }) => (
   <div 
     onClick={onClick}
     style={{
-      display: 'flex', 
-      alignItems: 'center', 
-      padding: '20px', 
-      background: 'var(--bg-white)', 
-      borderRadius: '16px', 
-      marginBottom: '15px', 
-      cursor: 'pointer', 
-      boxShadow: 'var(--card-shadow)', 
-      transition: '0.2s',
-      justifyContent: 'space-between', 
-      border: '1px solid var(--border-color)'
+      display: 'flex', alignItems: 'center', padding: '18px 22px', 
+      background: theme.card, borderRadius: '20px', marginBottom: '15px', 
+      cursor: 'pointer', transition: '0.3s', justifyContent: 'space-between', 
+      border: `1px solid ${theme.border}`, backdropFilter: theme.isDarkMode ? 'blur(10px)' : 'none'
     }}
-    onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
-    onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+    onMouseEnter={(e) => e.currentTarget.style.transform = 'translateX(5px)'}
+    onMouseLeave={(e) => e.currentTarget.style.transform = 'translateX(0)'}
   >
-    <div style={{display:'flex', alignItems:'center', gap:'20px'}}>
+    <div style={{display:'flex', alignItems:'center', gap:'18px'}}>
       <div style={{
-        width:'60px', height:'60px', borderRadius:'15px', background: bg, 
-        display:'flex', alignItems:'center', justifyContent:'center', 
-        fontSize:'28px', color: color
+        width:'52px', height:'52px', borderRadius:'14px', background: bg, 
+        display:'flex', alignItems:'center', justifyContent:'center', fontSize:'24px', color: color
       }}>
         {icon}
       </div>
       <div>
-        <h4 style={{fontSize:'16px', color:'var(--text-main)', margin:'0 0 5px 0'}}>{title}</h4>
-        <p style={{fontSize:'12px', color:'var(--text-light)', margin:0}}>{sub || desc}</p>
+        <h4 style={{fontSize:'15px', color: theme.textMain, margin:'0 0 3px 0', fontWeight: '700'}}>{title}</h4>
+        <p style={{fontSize: '12px', color: theme.textLight, margin:0}}>{sub}</p>
       </div>
     </div>
-    <span style={{color:'var(--text-light)', fontSize:'24px'}}>➜</span>
-  </div>
-);
-
-const StepItem = ({ num, title, desc, active }) => (
-  <div style={{ display: 'flex', gap: '15px', position: 'relative', paddingBottom: '30px' }}>
-    <div style={{
-      position: 'absolute', left: '15px', top: '35px', bottom: '-5px', width: '2px', 
-      background: 'var(--bg-page)', zIndex: 0 
-    }}></div>
-    <div style={{
-      width: '32px', height: '32px', flexShrink: 0, borderRadius: '50%', 
-      background: active ? 'var(--primary)' : 'var(--bg-page)', 
-      color: active ? 'white' : 'var(--text-light)',
-      display: 'flex', alignItems: 'center', justifyContent: 'center', 
-      fontWeight: 'bold', fontSize: '14px', zIndex: 1
-    }}>
-      {num}
-    </div>
-    <div>
-      <h5 style={{ fontSize: '14px', color: active ? 'var(--text-main)' : 'var(--text-light)', marginBottom: '4px', margin: 0 }}>{title}</h5>
-      <p style={{ fontSize: '12px', color: 'var(--text-light)', margin: 0 }}>{desc}</p>
-    </div>
+    <ArrowRight size={18} color={theme.textLight} />
   </div>
 );
 
@@ -88,8 +67,19 @@ const StepItem = ({ num, title, desc, active }) => (
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const { isAuthenticated, isNewUser, markFeatureUsed, user } = useContext(UserContext);
+  const { isAuthenticated, isNewUser, markFeatureUsed, user, isDarkMode } = useContext(UserContext);
   
+  // --- DYNAMIC THEME ENGINE ---
+  const theme = {
+    isDarkMode,
+    bg: isDarkMode ? 'linear-gradient(135deg, #0B1437 0%, #111C44 100%)' : '#F4F7FE',
+    card: isDarkMode ? 'rgba(17, 28, 68, 0.7)' : '#FFFFFF',
+    border: isDarkMode ? 'rgba(255, 255, 255, 0.1)' : '#E0E5F2',
+    textMain: isDarkMode ? '#FFFFFF' : '#1B2559',
+    textLight: isDarkMode ? '#A3AED0' : '#888888',
+    iconBg: isDarkMode ? '#1B254B' : '#F4F7FE'
+  };
+
   const showWelcome = !isAuthenticated || (isAuthenticated && isNewUser);
 
   const handleStartFeature = (path) => {
@@ -101,6 +91,7 @@ const Dashboard = () => {
     }
   };
 
+<<<<<<< Updated upstream
   const handleSkip = () => {
     if (isAuthenticated) {
       markFeatureUsed();
@@ -190,80 +181,110 @@ const Dashboard = () => {
   }
 
   // --- VIEW 2: STANDARD DASHBOARD ---
+=======
+>>>>>>> Stashed changes
   return (
-    <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '40px' }}>
+    <div style={{ 
+      background: theme.bg, 
+      backgroundAttachment: 'fixed',
+      minHeight: '100vh', 
+      padding: '30px', 
+      transition: '0.4s ease',
+      color: theme.textMain 
+    }}>
+      
+      {/* 1. TOP HEADER */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px' }}>
         <div>
-          <h1 style={{ fontSize: '32px', color: 'var(--text-main)', margin: '0 0 8px 0' }}>Hello, {user?.name?.split(' ')[0] || 'User'}! 👋</h1>
-          <p style={{ color: 'var(--text-light)', fontSize: '16px', margin: 0 }}>Here is your daily overview.</p>
+          <h1 style={{ fontSize: '30px', color: theme.textMain, margin: '0 0 5px 0', fontWeight: '800' }}>
+            Hello, {user?.name?.split(' ')[0] || 'User'}! 👋
+          </h1>
+          <p style={{ color: theme.textLight, fontSize: '15px', margin: 0 }}>Welcome to your daily career overview.</p>
         </div>
         
-        <div style={{ display: 'flex', gap: '20px' }}>
-          <div style={{ width: '45px', height: '45px', background: 'var(--bg-white)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: 'var(--card-shadow)', cursor: 'pointer', position: 'relative' }}>
-             <Bell size={22} color="#A3AED0" />
-             <div style={{position:'absolute', top:0, right:0, width:'12px', height:'12px', background:'red', borderRadius:'50%', border:'2px solid white'}}></div>
+        <div style={{ display: 'flex', gap: '15px' }}>
+          <div style={{ width: '45px', height: '45px', background: theme.card, border: `1px solid ${theme.border}`, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+             <Bell size={20} color={theme.textLight} />
           </div>
-          <div style={{ width: '45px', height: '45px', background: 'var(--bg-white)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: 'var(--card-shadow)', cursor: 'pointer' }} onClick={() => navigate('/settings')}>
-             <Settings size={22} color="#A3AED0" />
+          <div style={{ width: '45px', height: '45px', background: theme.card, border: `1px solid ${theme.border}`, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }} onClick={() => navigate('/settings')}>
+             <Settings size={20} color={theme.textLight} />
           </div>
         </div>
       </div>
 
-      <div style={{ 
-        display: 'grid', 
-        gridTemplateColumns: 'repeat(4, 1fr)', 
-        gap: '25px', 
-        marginBottom: '40px' 
-      }}>
-        <StatCard icon="📊" color="var(--primary)" label="ATS Score" value="87%" sub="+5% this week" subColor="var(--green)" cornerIcon="📈" />
-        <StatCard icon="💰" color="var(--green)" label="Target Salary" value="$98K" sub="Market avg: $95K" subColor="var(--text-light)" cornerIcon="💵" />
-        <StatCard icon="🚧" color="var(--orange)" label="Progress" value="38%" sub="Career roadmap" subColor="var(--text-light)" cornerIcon="🎯" />
-        <StatCard icon="🏆" color="var(--purple)" label="Achievements" value="12" sub="Skills unlocked" subColor="var(--text-light)" cornerIcon="🎗️" />
-      </div>
+      {showWelcome ? (
+        /* WELCOME / GUEST VIEW */
+        <div style={{ animation: 'fadeIn 0.5s ease-out' }}>
+          <div style={{
+            background: 'linear-gradient(135deg, #868CFF 0%, #4318FF 100%)',
+            borderRadius: '24px', padding: '40px', color: 'white', marginBottom: '40px',
+            display: 'flex', alignItems: 'center', gap: '25px', boxShadow: '0 10px 30px rgba(67, 24, 255, 0.3)'
+          }}>
+            <div style={{background: 'rgba(255,255,255,0.2)', padding:'12px', borderRadius:'14px'}}><Rocket size={32} /></div>
+            <div>
+              <h2 style={{fontSize: '28px', margin: 0, fontWeight: 800}}>Kickstart Your Career</h2>
+              <p style={{marginTop:'5px', fontSize:'15px', opacity:0.9}}>Upload your resume to see your first AI ATS score.</p>
+            </div>
+          </div>
 
-      <div style={{ 
-        display: 'grid', 
-        gridTemplateColumns: '2fr 1fr', 
-        gap: '30px', 
-        alignItems: 'start' 
-      }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '25px' }}>
-          <h3 style={{fontSize: '20px', color: 'var(--text-main)', fontWeight: 700, margin: 0}}>Quick Actions</h3>
-          <ActionRow icon="📄" bg="#4318FF" color="white" title="Resume Analyzer" desc="Optimize for ATS systems • Ready to scan" onClick={() => handleStartFeature('/resume')} />
-          <ActionRow icon="🗺️" bg="#FFB547" color="white" title="Career Roadmap" desc="Personalized learning path • 38% complete" onClick={() => handleStartFeature('/roadmap')} />
-          <ActionRow icon="💰" bg="#05CD99" color="white" title="Salary Insights" desc="Check market rates • View Report" onClick={() => handleStartFeature('/salary')} />
+          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '30px' }}>
+            <div>
+               <h3 style={{color: theme.textMain, fontSize: '18px', fontWeight: 700, marginBottom: '20px'}}>Quick Onboarding</h3>
+               <ActionRow theme={theme} icon="📄" bg="#E0E7FF" color="#4318FF" title="Upload Resume" sub="Get instant ATS feedback" onClick={() => handleStartFeature('/resume')} />
+               <ActionRow theme={theme} icon="💰" bg="#D1FAE5" color="#05CD99" title="Check Salary" sub="Compare market rates" onClick={() => handleStartFeature('/salary')} />
+               <ActionRow theme={theme} icon="🗺️" bg="#FEF3C7" color="#FFB547" title="Build Roadmap" sub="Create your learning path" onClick={() => handleStartFeature('/roadmap')} />
+            </div>
+            <Card style={{ padding: '30px', background: theme.card, border: `1px solid ${theme.border}`, textAlign: 'center' }}>
+                <div style={{ width: '60px', height: '60px', background: theme.iconBg, color: '#4318FF', borderRadius: '50%', margin: '0 auto 15px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><GraduationCap size={30} /></div>
+                <h4 style={{color: theme.textMain, fontWeight: 800}}>Professional Guide</h4>
+                <p style={{fontSize: '13px', color: theme.textLight, lineHeight: 1.5}}>Login to save your resume history and track milestones.</p>
+                <div style={{marginTop: '25px'}}>
+                   <Button variant="primary" fullWidth onClick={() => navigate('/login')}>Login Now</Button>
+                </div>
+            </Card>
+          </div>
         </div>
-        
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '25px' }}>
-          <h3 style={{fontSize: '20px', color: 'var(--text-main)', fontWeight: 700, margin: 0}}>Recent Activity</h3>
-          <Card style={{ padding: '30px', background: 'var(--bg-white)', height: '100%' }}>
-             <div style={{ display: 'flex', gap: '20px', marginBottom: '30px', alignItems: 'flex-start' }}>
-               <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: 'var(--green)', marginTop: '6px', flexShrink: 0 }}></div>
-               <div>
-                 <h5 style={{ fontSize: '15px', margin: '0 0 5px 0', color: 'var(--text-main)' }}>Resume analysis completed</h5>
-                 <p style={{ fontSize: '13px', color: 'var(--text-light)', margin: 0 }}>Score improved by 5 points</p>
-                 <span style={{ fontSize: '11px', color: 'var(--text-light)', fontWeight: 700, marginTop: '5px', display: 'block' }}>2 hours ago</span>
-               </div>
+      ) : (
+        /* STANDARD LOGGED-IN VIEW */
+        <div style={{ animation: 'fadeIn 0.5s ease-out' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px', marginBottom: '40px' }}>
+            <StatCard theme={theme} icon={<TrendingUp size={22}/>} color="#4318FF" label="ATS Score" value="87%" sub="+5% improved" subColor="#05CD99" />
+            <StatCard theme={theme} icon={<DollarSign size={22}/>} color="#05CD99" label="Target Salary" value="$98K" sub="High potential" subColor={theme.textLight} />
+            <StatCard theme={theme} icon={<Target size={22}/>} color="#FFB547" label="Progress" value="38%" sub="Roadmap active" subColor={theme.textLight} />
+            <StatCard theme={theme} icon={<Award size={22}/>} color="#868CFF" label="Skills" value="12" sub="Certified" subColor={theme.textLight} />
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '30px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+              <h3 style={{fontSize: '18px', color: theme.textMain, fontWeight: 800, marginBottom: '5px'}}>Core Features</h3>
+              <ActionRow theme={theme} icon="📄" bg="#4318FF" color="white" title="Analyze Resume" sub="Scan for ATS compliance" onClick={() => handleStartFeature('/resume')} />
+              <ActionRow theme={theme} icon="🗺️" bg="#FFB547" color="white" title="My Roadmap" sub="Continue learning: React.js" onClick={() => handleStartFeature('/roadmap')} />
+              <ActionRow theme={theme} icon="💰" bg="#05CD99" color="white" title="Salary Trends" sub="New data for 2026 available" onClick={() => handleStartFeature('/salary')} />
             </div>
-            <div style={{ display: 'flex', gap: '20px', marginBottom: '30px', alignItems: 'flex-start' }}>
-               <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: 'var(--primary)', marginTop: '6px', flexShrink: 0 }}></div>
-               <div>
-                 <h5 style={{ fontSize: '15px', margin: '0 0 5px 0', color: 'var(--text-main)' }}>New skill recommendation</h5>
-                 <p style={{ fontSize: '13px', color: 'var(--text-light)', margin: 0 }}>TypeScript added to roadmap</p>
-                 <span style={{ fontSize: '11px', color: 'var(--text-light)', fontWeight: 700, marginTop: '5px', display: 'block' }}>1 day ago</span>
-               </div>
+            
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+              <h3 style={{fontSize: '18px', color: theme.textMain, fontWeight: 800, marginBottom: '5px'}}>Recent History</h3>
+              <Card style={{ padding: '25px', background: theme.card, border: `1px solid ${theme.border}` }}>
+                 {[
+                   { title: "Review Complete", desc: "ATS score increased", time: "2h ago", dot: "#05CD99" },
+                   { title: "Skill Added", desc: "TypeScript to Roadmap", time: "1d ago", dot: "#4318FF" },
+                   { title: "Alert", desc: "Salary trends updated", time: "3d ago", dot: "#868CFF" }
+                 ].map((item, i) => (
+                   <div key={i} style={{ display: 'flex', gap: '15px', marginBottom: i === 2 ? 0 : '22px', alignItems: 'flex-start' }}>
+                     <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: item.dot, marginTop: '4px', flexShrink: 0 }}></div>
+                     <div>
+                       <h5 style={{ fontSize: '14px', margin: '0 0 2px 0', color: theme.textMain, fontWeight: '700' }}>{item.title}</h5>
+                       <p style={{ fontSize: '12px', color: theme.textLight, margin: 0 }}>{item.desc}</p>
+                       <span style={{ fontSize: '10px', color: theme.textLight, fontWeight: 600, marginTop: '3px', display: 'block' }}>{item.time}</span>
+                     </div>
+                   </div>
+                 ))}
+              </Card>
             </div>
-            <div style={{ display: 'flex', gap: '20px', alignItems: 'flex-start' }}>
-               <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: 'var(--purple)', marginTop: '6px', flexShrink: 0 }}></div>
-               <div>
-                 <h5 style={{ fontSize: '15px', margin: '0 0 5px 0', color: 'var(--text-main)' }}>Salary data updated</h5>
-                 <p style={{ fontSize: '13px', color: 'var(--text-light)', margin: 0 }}>Market rates increased 3%</p>
-                 <span style={{ fontSize: '11px', color: 'var(--text-light)', fontWeight: 700, marginTop: '5px', display: 'block' }}>3 days ago</span>
-               </div>
-            </div>
-          </Card>
+          </div>
         </div>
-      </div>
+      )}
+      <style>{`@keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }`}</style>
     </div>
   );
 };
