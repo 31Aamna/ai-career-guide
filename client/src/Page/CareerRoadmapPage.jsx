@@ -22,9 +22,14 @@ const CareerRoadmapPage = () => {
       {/* 1. HEADER ROW */}
       <div className="flex-between mb-30">
         <div className="roadmap-header" style={{marginBottom: 0}}>
-          <h1>Career Roadmap 🗺️</h1>
+          <h1>Career <span style={{color:'var(--primary)'}}>Roadmap</span></h1>
           <p>Your personalized path to becoming a <span className="role-highlight">{targetGoal}</span></p>
         </div>
+
+        {/* <div className="flex-between mb-30" style={{textAlign: 'center', marginBottom: '40px', display: 'flex', flexDirection: 'column', marginTop: '20px'}}>
+          <h1>Career <span style={{color:'var(--primary)'}}>Roadmap</span></h1>
+          <p>Your personalized path to becoming a <span className="role-highlight">{targetGoal}</span></p>
+        </div> */}
         
         {/* Warning Badge */}
         <div className="no-context-badge">

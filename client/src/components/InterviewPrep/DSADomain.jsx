@@ -12,7 +12,9 @@ const DSADomain = ({ onSelectDomain, onBack }) => {
         <p style={{color:'var(--text-light)'}}>Select a specific Zone to practice</p>
       </div>
 
-      <div className="grid-4" style={{gridTemplateColumns:'repeat(auto-fit, minmax(280px, 1fr))'}}>
+      {/* <div className="grid-4" style={{gridTemplateColumns:'repeat(auto-fit, minmax(280px, 1fr))'}}> */}
+      <div className="card-grid">
+
         {/* Back Button Card */}
         {/* <Card onClick={onBack} style={{cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', minHeight:'150px'}}>
           <div style={{textAlign:'center'}}>
@@ -23,13 +25,13 @@ const DSADomain = ({ onSelectDomain, onBack }) => {
         
 
         {dsaDomainData.map((domain) => (
-          <Card key={domain.id} onClick={() => onSelectDomain(domain.id)} style={{cursor:'pointer', minHeight:'140px', minWidth:'300px', display:'flex', flexDirection:'column', justifyContent:'space-between'}}>
+          <Card key={domain.id} onClick={() => onSelectDomain(domain.id)} style={{cursor:'pointer', minHeight:'180px',display:'flex', flexDirection:'column', justifyContent:'space-between'}}>
             <div>
               {/* <div style={{width:'40px', height:'40px', background:'#EFF6FF', borderRadius:'8px', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'20px', marginBottom:'15px'}}>{domain.icon}</div> */}
-              <h4 style={{fontSize:'16px', marginBottom:'5px'}}>{domain.id}</h4>
-              <p style={{fontSize:'12px', color:'var(--text-light)'}}>{domain.desc}</p>
+              <h4 style={{fontSize:'16px', marginBottom:'6px'}}>{domain.id}</h4>
+              <p style={{fontSize:'13px'}}>{domain.desc}</p>
             </div>
-            <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginTop:'20px', fontSize:'12px', fontWeight:'600'}}>
+            <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginTop:'20px', fontSize: '13px', fontWeight: '600', color: 'var(--text-light)' }}>
               <span>Start Practice</span>
               <span>➜</span>
             </div>

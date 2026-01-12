@@ -24,11 +24,15 @@ const SalaryInsightsPage = () => {
   return (
     <div>
       {/* Header */}
-      <header className="salary-header-row">
-        <div>
-          {/* 3. Use Dynamic Name */}
+      <div className=" flex-between mb-30">
+        {/* <div>
           <h1>Hey {firstName}, <span className="text-light">here is your salary overview.</span></h1>
           <p className="subtitle">Based on your resume analysis as <strong>{data.role}</strong></p>
+        </div> */}
+
+        <div className="roadmap-header " style={{marginBottom: 0}}>
+          <h1>Hey {firstName}, <span style={{color:'var(--primary)'}}>here is your salary overview.</span></h1>
+          <p>Based on your resume analysis as <strong>{data.role}</strong></p>
         </div>
         
         <div className="resume-source-card">
@@ -39,7 +43,7 @@ const SalaryInsightsPage = () => {
           </div>
           <button className="arrow-btn">›</button>
         </div>
-      </header>
+      </div>
 
       {/* Main Grid */}
       <div className="salary-grid">

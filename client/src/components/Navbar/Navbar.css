@@ -9,3 +9,29 @@
 .badge { font-size: 10px; background: #FFB547; padding: 2px 6px; border-radius: 4px; margin-left: auto; color: white; }
 .premium-card { background: rgba(0,0,0,0.2); padding: 20px; border-radius: 20px; text-align: center; }
 .upgrade-btn { width: 100%; padding: 10px; border: none; border-radius: 20px; background: white; color: var(--primary); font-weight: 700; cursor: pointer; }
+
+
+/* ===== MOBILE HAMBURGER ===== */
+.mobile-menu-btn {
+  display: none;
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  z-index: 3000;
+  background: var(--primary);
+  color: white;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  font-size: 22px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* Only show on mobile */
+@media (max-width: 768px) {
+  .mobile-menu-btn {
+    display: flex;
+  }
+}

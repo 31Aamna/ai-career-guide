@@ -10,7 +10,9 @@ const HRDomainsPage = ({ onSelectDomain, onBack }) => {
         <p style={{color:'var(--text-light)'}}>Prepare for the final hurdle</p>
       </div>
 
-      <div className="grid-4" style={{gridTemplateColumns:'repeat(auto-fit, minmax(220px, 1fr))'}}>
+      {/* <div className="grid-4" style={{gridTemplateColumns:'repeat(auto-fit, minmax(220px, 1fr))'}}> */}
+      <div className="card-grid" >
+
         <Card onClick={onBack} style={{cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', minHeight:'150px'}}>
           <div style={{textAlign:'center'}}>
             <div style={{fontSize:'24px', marginBottom:'10px'}}>⬅️</div>

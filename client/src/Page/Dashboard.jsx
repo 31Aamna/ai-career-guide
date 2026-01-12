@@ -118,7 +118,7 @@ const Dashboard = () => {
           borderRadius: '24px', padding: '40px 50px', color: 'white', marginBottom: '40px',
           display: 'flex', alignItems: 'center', gap: '30px', minHeight: '180px', 
           boxShadow: '0 10px 30px rgba(67, 24, 255, 0.3)'
-        }}>
+          }}>
           <div style={{background: 'rgba(255,255,255,0.2)', padding:'15px', borderRadius:'16px', fontSize:'32px'}}>🚀</div>
           <div>
             <h2 style={{fontSize: '32px', margin: 0, color: 'white', fontWeight: 800}}>Welcome to CareerAI!</h2>
@@ -166,8 +166,8 @@ const Dashboard = () => {
           </div>
           
           {/* Right Column */}
-          <Card style={{ height: '100%', minHeight: '550px', padding: '30px' }}>
-            <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+          <Card  className="new-to-careerai" style={{ height: '100%', minHeight: '550px', padding: '30px' }}>
+            <div style={{ textAlign: 'center' }}>
               <div style={{ width: '70px', height: '70px', background: 'var(--purple-light)', color: 'var(--primary)', borderRadius: '50%', margin: '0 auto 20px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '32px' }}>🎓</div>
               <h3 style={{color: 'var(--text-main)', fontSize: '20px'}}>New to CareerAI?</h3>
               <p style={{ fontSize: '13px', marginTop: '8px', color: 'var(--text-light)' }}>Follow these steps to get the most out of your experience</p>

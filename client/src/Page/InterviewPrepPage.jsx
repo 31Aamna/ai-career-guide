@@ -126,7 +126,7 @@ const InterviewPrepPage = () => {
     <div>
       {/* Header */}
       {view === 'main' && (
-        <div className="flex-between mb-30" style={{textAlign: 'center', marginBottom: '40px', display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '20px'}}>
+        <div className="flex-between mb-30 roadmap-header" style={{textAlign: 'center', marginBottom: '40px', display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '20px'}}>
           <h1>Interview <span style={{color:'var(--primary)'}}>Prep Pro</span></h1>
           <p>Master Technical Interviews With Curated Questions Across All Domains</p>
           {/* <span style={{background:'var(--green-bg)', color:'var(--green)', padding:'5px 10px', borderRadius:'10px', fontSize:'12px', fontWeight:'bold'}}>PREMIUM UNLOCKED</span> */}

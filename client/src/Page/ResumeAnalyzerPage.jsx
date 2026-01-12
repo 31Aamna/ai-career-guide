@@ -31,10 +31,16 @@ const ResumeAnalyzerPage = () => {
     <div className="resume-container">
       {/* Header */}
       <div className="flex-between mb-30">
-        <div className="resume-header" style={{margin:0}}>
+        {/* <div className="resume-header" style={{margin:0}}>
           <h1 style={{fontSize: '28px', margin: '0 0 5px 0'}}>Resume Analyzer</h1>
           <p>Get instant feedback on your resume.</p>
+        </div> */}
+
+        <div className="roadmap-header" style={{marginBottom: 0}}>
+          <h1>Resume <span style={{color:'var(--primary)'}}>Analyzer</span></h1>
+          <p>Get instant feedback on your resume.</p>
         </div>
+        
         {/* Optional Reset Button */}
         {analyzed && (
           <Button variant="outline" onClick={handleReset}>
